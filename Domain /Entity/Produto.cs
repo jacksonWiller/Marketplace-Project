@@ -4,7 +4,7 @@ using Domain.Interfaces;
 
 namespace Domain.Entity
 {
-    public class Produto : IProduto
+    public class Produto
     {
         public int Id {get; set;}
         public string Nome {get; set;}

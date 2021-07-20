@@ -4,6 +4,7 @@ using AplicationApp.Dtos;
 using AplicationApp.Interfaces;
 using AutoMapper;
 using Domain.Entity;
+using Domain.Interfaces;
 using Infrastructure.Repository;
 using Infrastructure.Repository.Interfaces;
 
@@ -11,11 +12,11 @@ namespace AplicationApp
 {
     public class ProdutoService : IProdutoService
     {
-        private readonly IRepositoryProduto _repositoryProduto;
-        private readonly IRepositoryGeneric _repositoryGeneric;
+        private readonly IProduto _repositoryProduto;
+        private readonly IGeneric<Produto> _repositoryGeneric;
         private readonly IMapper _mapper;
-        public ProdutoService(IRepositoryGeneric repositoryGeneric,
-                              IRepositoryProduto repositoryProduto,
+        public ProdutoService(IGeneric<Produto> repositoryGeneric,
+                              IProduto repositoryProduto,
                               IMapper mapper)
         {
             _repositoryProduto = repositoryProduto;
@@ -29,7 +30,7 @@ namespace AplicationApp
             {
                 var evento = _mapper.Map<Produto>(model);
 
-                _repositoryGeneric.Add<Produto>(evento);
+                await _repositoryGeneric.Add(evento);
 
                 if (await _repositoryGeneric.SaveChangesAsync())
                 {
@@ -56,7 +57,7 @@ namespace AplicationApp
 
                 _mapper.Map(model, produto);
 
-                _repositoryGeneric.Update<Produto>(produto);                
+                await _repositoryGeneric.Update(produto);                
 
                 if (await _repositoryGeneric.SaveChangesAsync())
                 {
@@ -78,7 +79,7 @@ namespace AplicationApp
             var produto = await _repositoryProduto.GetProdutoAsyncById(produtoId);
             if (produto == null) throw new Exception("Evento para delete não encontrado.");
 
-            _repositoryGeneric.Delete<Produto>(produto);
+                await _repositoryGeneric.Delete(produto);
             return await _repositoryGeneric.SaveChangesAsync();
         }
         catch (Exception ex)

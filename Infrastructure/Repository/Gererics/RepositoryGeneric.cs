@@ -1,10 +1,13 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using ProAgil.Repository;
 
 namespace Infrastructure.Repository.Gererics
 {
-    public class RepositoryGeneric : IRepositoryGeneric
+    public class RepositoryGeneric<T>  : IGeneric<T> where T : class
     {
         private readonly DataContext _dataContext;
         public RepositoryGeneric (DataContext dataContext)
@@ -12,25 +15,36 @@ namespace Infrastructure.Repository.Gererics
             _dataContext = dataContext;
             // _dataContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
-        public void Add<T>(T entity) where T : class
+        public async Task Add(T Objeto)
         {
-            _dataContext.Add(entity);
+            await _dataContext.Set<T>().AddAsync(Objeto);
+            await _dataContext.SaveChangesAsync();
         }
-         public void Update<T>(T entity) where T : class
+        public async Task Update(T Objeto)
         {
-            _dataContext.Update(entity);
+             _dataContext.Set<T>().Update(Objeto);
+            await _dataContext.SaveChangesAsync();
         }
-        public void Delete<T>(T entity) where T : class
+        public async Task Delete(T Objeto)
         {
-            _dataContext.Remove(entity);
+            _dataContext.Set<T>().Remove(Objeto);
+            await _dataContext.SaveChangesAsync();
         }
-        // public void DeleteRange<T>(T[] entityArray) where T : class
-        // {
-        //      _dataContext.RemoveRange(entityArray);
-        // }
+        public async Task<T> GetEntityById(int Id)
+        {
+            return await _dataContext.Set<T>().FindAsync(Id);
+        }
+
+        public async Task<List<T>> List()
+        {
+            return await _dataContext.Set<T>().AsNoTracking().ToListAsync();
+        }
+
         public async Task<bool> SaveChangesAsync()
         {
             return (await _dataContext.SaveChangesAsync()) > 0;
         }
+
+        
     }
 }

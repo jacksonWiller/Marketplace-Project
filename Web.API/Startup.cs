@@ -27,6 +27,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Domain.Interfaces;
 
 namespace Web.API
 {
@@ -112,9 +113,9 @@ namespace Web.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Web.API", Version = "v1" });
             });
+            services.AddScoped(typeof(IGeneric<>), typeof(RepositoryGeneric<>));
             services.AddScoped<IProdutoService, ProdutoService>();
-            services.AddScoped<IRepositoryGeneric, RepositoryGeneric>();
-            services.AddScoped<IRepositoryProduto, RepositoryProduto>();
+            services.AddScoped<IProduto, RepositoryProduto>();
             services.AddCors();
         }
 

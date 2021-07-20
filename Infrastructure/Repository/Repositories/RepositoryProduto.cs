@@ -10,11 +10,11 @@ using Infrastructure.Repository.Interfaces;
 
 namespace Infrastructure.Repository.Repositories
 {
-    public class RepositoryProduto : RepositoryGeneric, IRepositoryProduto
+    public class RepositoryProduto : IProduto
     {
         public readonly DataContext _dataContext;
 
-        public RepositoryProduto(DataContext dataContext) : base(dataContext)
+        public RepositoryProduto(DataContext dataContext)
         {
             _dataContext = dataContext;
         }
