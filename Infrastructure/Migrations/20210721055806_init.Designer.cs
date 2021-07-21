@@ -9,7 +9,7 @@ using ProAgil.Repository;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210721004004_init")]
+    [Migration("20210721055806_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,13 +25,25 @@ namespace Infrastructure.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("PRD_ID");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("PRD_CREATED");
+
                     b.Property<bool>("Estado")
                         .HasColumnType("INTEGER")
                         .HasColumnName("PRD_ESTADO");
 
+                    b.Property<DateTime>("Modified")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("PRD_MODIFIED");
+
                     b.Property<string>("Nome")
                         .HasColumnType("TEXT")
                         .HasColumnName("PRD_NOME");
+
+                    b.Property<int>("Quantidade")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("PRD_QUANT");
 
                     b.Property<decimal>("Valor")
                         .HasColumnType("TEXT")

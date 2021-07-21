@@ -57,7 +57,10 @@ namespace Infrastructure.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     PRD_NOME = table.Column<string>(type: "TEXT", nullable: true),
                     PRD_VALO = table.Column<decimal>(type: "TEXT", nullable: false),
-                    PRD_ESTADO = table.Column<bool>(type: "INTEGER", nullable: false)
+                    PRD_QUANT = table.Column<int>(type: "INTEGER", nullable: false),
+                    PRD_ESTADO = table.Column<bool>(type: "INTEGER", nullable: false),
+                    PRD_CREATED = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    PRD_MODIFIED = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

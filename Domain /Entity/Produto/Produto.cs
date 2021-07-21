@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -22,9 +23,21 @@ namespace Domain.Entity
         [Display(Name = "Valor")]
         public decimal Valor { get; set; }
 
+        [Column("PRD_QUANT")]
+        [Display(Name = "Quantidade")]
+        public int Quantidade { get; set; }
+
         [Column("PRD_ESTADO")]
         [Display(Name = "Estado")]
         public bool Estado { get; set; }
+        
+        [Column("PRD_CREATED")]
+        [Display(Name = "Created")]
+        public virtual DateTime Created { get; set; }
+
+        [Column("PRD_MODIFIED")]
+        [Display(Name = "Modified")]
+        public virtual DateTime Modified { get; set; }
     }    
 }
 
