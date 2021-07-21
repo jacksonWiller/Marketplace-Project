@@ -50,17 +50,18 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Produtos",
+                name: "Product",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    PRD_ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Nome = table.Column<string>(type: "TEXT", nullable: true),
-                    Quantidade = table.Column<int>(type: "INTEGER", nullable: false)
+                    PRD_NOME = table.Column<string>(type: "TEXT", nullable: true),
+                    PRD_VALO = table.Column<decimal>(type: "TEXT", nullable: false),
+                    PRD_ESTADO = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Produtos", x => x.Id);
+                    table.PrimaryKey("PK_Product", x => x.PRD_ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -225,7 +226,7 @@ namespace Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Produtos");
+                name: "Product");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

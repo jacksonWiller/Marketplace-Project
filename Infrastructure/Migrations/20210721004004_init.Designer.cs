@@ -9,7 +9,7 @@ using ProAgil.Repository;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210628072503_init")]
+    [Migration("20210721004004_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,17 +22,24 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("PRD_ID");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("PRD_ESTADO");
 
                     b.Property<string>("Nome")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("PRD_NOME");
 
-                    b.Property<int>("Quantidade")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("PRD_VALO");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Produtos");
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("Domain.Identity.Role", b =>
