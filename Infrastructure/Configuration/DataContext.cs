@@ -13,6 +13,7 @@ namespace ProAgil.Repository
         public DataContext(DbContextOptions<DataContext> options) : base (options) {}
     
         public DbSet<Produto> Produtos {get;set;}
+        public DbSet<Categoria> Categorias {get;set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder )
         {
@@ -20,6 +21,30 @@ namespace ProAgil.Repository
 
             modelBuilder.Entity<UserRole>(userRole => 
                 {
+                
+                    modelBuilder.Entity<ProdutosCategorias>()
+                    .HasKey(PC => new {PC.ProdutoId, PC.CategoriaId});
+
+                    modelBuilder.Entity<ProdutosCategorias>()
+                    .HasOne(pc => pc.Produto)
+                    .WithMany(pc => pc.ProdutosCategorias)
+                    .HasForeignKey(pc => pc.ProdutoId);
+                    
+                    modelBuilder.Entity<ProdutosCategorias>()
+                    .HasOne(pc => pc.Categoria)
+                    .WithMany(pc => pc.ProdutosCategorias)
+                    .HasForeignKey(pc => pc.CategoriaId);
+
+                    // modelBuilder.Entity<Produto>()
+                    // .HasMany(e => e.RedesSociais)
+                    // .WithOne(rs => rs.Evento)
+                    // .OnDelete(DeleteBehavior.Cascade);
+
+                    // modelBuilder.Entity<Palestrante>()
+                    // .HasMany(e => e.RedesSociais)
+                    // .WithOne(rs => rs.Palestrante)
+                    // .OnDelete(DeleteBehavior.Cascade);
+
                     userRole.HasKey(ur => new {ur.UserId, ur.RoleId});
 
                     userRole.HasOne(ur => ur.Role)

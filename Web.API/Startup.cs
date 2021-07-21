@@ -115,7 +115,9 @@ namespace Web.API
             });
             services.AddScoped(typeof(IGeneric<>), typeof(RepositoryGeneric<>));
             services.AddScoped<IProdutoService, ProdutoService>();
+            services.AddScoped<ICategoriaService, CategoriaService>();
             services.AddScoped<IProduto, RepositoryProduto>();
+            services.AddScoped<ICategoria, RepositoryCategoria>();
             services.AddCors();
         }
 

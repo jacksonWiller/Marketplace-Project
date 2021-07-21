@@ -24,19 +24,19 @@ namespace AplicationApp
             _mapper = mapper;
         }
 
-        public async Task<ProdutoDto> AddProduto(ProdutoDto model)
+        public async Task<ProdutoDto> AddProduto(ProdutoDto produtoDto)
         {
             try
             {
-                var evento = _mapper.Map<Produto>(model);
+                var evento = _mapper.Map<Produto>(produtoDto);
 
                 await _repositoryGeneric.Add(evento);
 
                 if (await _repositoryGeneric.SaveChangesAsync())
                 {
-                    var eventoRetorno = await _repositoryProduto.GetProdutoAsyncById(evento.Id);
+                    var produtoRetorno = await _repositoryProduto.GetProdutoAsyncById(evento.Id);
 
-                    return _mapper.Map<ProdutoDto>(eventoRetorno);
+                    return _mapper.Map<ProdutoDto>(produtoRetorno);
                 }
                 return null;
             }

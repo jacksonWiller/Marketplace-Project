@@ -1,30 +1,22 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using AplicationApp.Dtos;
+using AplicationApp.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Domain.Entity;
-using Infrastructure.Repository;
-using Infrastructure.Repository.Interfaces;
-using Infrastructure.Repository.Gererics;
-using AplicationApp.Interfaces;
-using AplicationApp.Dtos;
-using Microsoft.AspNetCore.Authorization;
 
-namespace Web.Api.Controllers
+namespace Web.API.Controllers
 {
     [Route("api/Produtos/[controller]")]
     [ApiController]
-    public class ProdutoController : ControllerBase
+    public class CategoriasController : ControllerBase
     {
-        private readonly IProdutoService _produtoService;
+        private readonly ICategoriaService _categoriaService;
         
-        public ProdutoController(IProdutoService produtoService)
+        public CategoriasController(ICategoriaService categoriaService)
         {
-            _produtoService = produtoService;
+            _categoriaService = categoriaService;
         }
 
         [HttpGet]
@@ -33,7 +25,7 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var produtos = await _produtoService.GetAllProdutosAsync();
+                var produtos = await _categoriaService.GetAllCategoriasAsync();
                 if (produtos == null) return NoContent();
                 return Ok(produtos);
             }
@@ -49,9 +41,9 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var produto = await _produtoService.GetAllProdutosAsyncByNome(nome);
+                var categoria = await _categoriaService.GetAllCategoriasAsyncByNome(nome);
 
-                return Ok(produto);
+                return Ok(categoria);
             }
             catch (System.Exception)
             {
@@ -59,15 +51,15 @@ namespace Web.Api.Controllers
                 "Banco Dados Falhou");
             }
         }
-        [HttpGet("{ProdutosId}")]
+        [HttpGet("{CategoriaId}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Get(int ProdutosId)
+        public async Task<IActionResult> Get(int CategoriaId)
         {
             try
             {
-                var produto = await _produtoService.GetProdutoAsyncById(ProdutosId);
+                var categoria = await _categoriaService.GetCategoriasAsyncById(CategoriaId);
 
-                return Ok(produto);
+                return Ok(categoria);
             }
             catch (System.Exception)
             {
@@ -78,12 +70,12 @@ namespace Web.Api.Controllers
          
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Post(ProdutoDto model)
+        public async Task<IActionResult> Post(CategoriaDto model)
         {
             try
             {
                 // Produto produto;
-                var retorno = await _produtoService.AddProduto(model);
+                var retorno = await _categoriaService.AddCategoria(model);
                
                 return Ok(retorno);
             }
@@ -95,11 +87,11 @@ namespace Web.Api.Controllers
         }
         [HttpPut("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Put(int id, ProdutoDto model)
+        public async Task<IActionResult> Put(int id, CategoriaDto model)
         {
             try
             {
-                var evento = await _produtoService.UpdateProduto(id, model);
+                var evento = await _categoriaService.UpdateCategoria(id, model);
                 if (evento == null) return NoContent();
 
                 return Ok(evento);
@@ -117,10 +109,10 @@ namespace Web.Api.Controllers
         {
             try
             {
-                var produto = await _produtoService.GetProdutoAsyncById(id);
+                var produto = await _categoriaService.GetCategoriasAsyncById(id);
                 if (produto == null) return NoContent();
 
-                return await _produtoService.DeleteProduto(id) 
+                return await _categoriaService.DeleteCategoria(id) 
                        ? Ok(new { message = "Deletado" }) 
                        : throw new Exception("Ocorreu um problem não específico ao tentar deletar Evento.");
             }
@@ -130,6 +122,5 @@ namespace Web.Api.Controllers
                     $"Erro ao tentar deletar eventos. Erro: {ex.Message}");
             }
         }
-    
     }
 }

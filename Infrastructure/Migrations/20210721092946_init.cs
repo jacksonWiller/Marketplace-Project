@@ -50,17 +50,32 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Categorias",
+                columns: table => new
+                {
+                    PRD_ID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    PRD_NOME = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categorias", x => x.PRD_ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Product",
                 columns: table => new
                 {
                     PRD_ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    PRD_NOME = table.Column<string>(type: "TEXT", nullable: true),
+                    PRD_NOME = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
+                    PRD_DESCRICAO = table.Column<string>(type: "TEXT", maxLength: 150, nullable: true),
+                    PRD_OBSERVACAO = table.Column<string>(type: "TEXT", maxLength: 20000, nullable: true),
                     PRD_VALO = table.Column<decimal>(type: "TEXT", nullable: false),
-                    PRD_QUANT = table.Column<int>(type: "INTEGER", nullable: false),
+                    PRD_QTD_ESTOQUE = table.Column<int>(type: "INTEGER", nullable: false),
                     PRD_ESTADO = table.Column<bool>(type: "INTEGER", nullable: false),
-                    PRD_CREATED = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    PRD_MODIFIED = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    PRD_DATA_CADASTRO = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    PRD_DATA_ALTERACAO = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -173,6 +188,30 @@ namespace Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ProdutosCategorias",
+                columns: table => new
+                {
+                    ProdutoId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CategoriaId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProdutosCategorias", x => new { x.ProdutoId, x.CategoriaId });
+                    table.ForeignKey(
+                        name: "FK_ProdutosCategorias_Categorias_CategoriaId",
+                        column: x => x.CategoriaId,
+                        principalTable: "Categorias",
+                        principalColumn: "PRD_ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProdutosCategorias_Product_ProdutoId",
+                        column: x => x.ProdutoId,
+                        principalTable: "Product",
+                        principalColumn: "PRD_ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -209,6 +248,11 @@ namespace Infrastructure.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProdutosCategorias_CategoriaId",
+                table: "ProdutosCategorias",
+                column: "CategoriaId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -229,13 +273,19 @@ namespace Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Product");
+                name: "ProdutosCategorias");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Categorias");
+
+            migrationBuilder.DropTable(
+                name: "Product");
         }
     }
 }

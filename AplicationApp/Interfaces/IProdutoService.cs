@@ -4,8 +4,7 @@ using AplicationApp.Dtos;
 namespace AplicationApp.Interfaces
 {
     public interface IProdutoService
-    {
-         
+    {   
         Task<ProdutoDto> AddProduto(ProdutoDto model);
         Task<ProdutoDto> UpdateProduto(int produtoId, ProdutoDto model);
         Task<bool> DeleteProduto(int produtoId);
