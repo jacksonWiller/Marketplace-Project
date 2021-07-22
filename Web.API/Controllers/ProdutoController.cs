@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Entity;
 using Infrastructure.Repository;
-using Infrastructure.Repository.Interfaces;
 using Infrastructure.Repository.Gererics;
 using AplicationApp.Interfaces;
 using AplicationApp.Dtos;

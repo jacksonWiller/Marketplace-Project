@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure.Repository;
 using Infrastructure.Repository.Gererics;
-using Infrastructure.Repository.Interfaces;
 using Infrastructure.Repository.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

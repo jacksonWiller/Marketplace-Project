@@ -15,7 +15,6 @@ namespace AplicationApp.Dtos
         public bool Estado { get; set; }
         public DateTime DataCadastro { get; set; }
         public DateTime DataAlteracao { get; set; }
-        
-        public ICollection<Categoria> Categorias { get; set; }
+        public ICollection<ProdutosCategorias> ProdutosCategorias { get; set; }
     }
 }

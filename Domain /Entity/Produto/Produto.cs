@@ -50,7 +50,7 @@ namespace Domain.Entity
         [Display(Name = "Data de Alteração")]
         public DateTime DataAlteracao { get; set; }
 
-        public ICollection<Categoria> Categorias { get; set; }
+        public ICollection<ProdutosCategorias> ProdutosCategorias { get; set; }
 
     }    
 }

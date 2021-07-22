@@ -63,7 +63,7 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Product",
+                name: "Produtos",
                 columns: table => new
                 {
                     PRD_ID = table.Column<int>(type: "INTEGER", nullable: false)
@@ -79,7 +79,7 @@ namespace Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Product", x => x.PRD_ID);
+                    table.PrimaryKey("PK_Produtos", x => x.PRD_ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -189,25 +189,25 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CategoriaProduto",
+                name: "ProdutosCategorias",
                 columns: table => new
                 {
-                    CategoriasId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ProdutosId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ProdutoId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CategoriaId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CategoriaProduto", x => new { x.CategoriasId, x.ProdutosId });
+                    table.PrimaryKey("PK_ProdutosCategorias", x => new { x.ProdutoId, x.CategoriaId });
                     table.ForeignKey(
-                        name: "FK_CategoriaProduto_Categorias_CategoriasId",
-                        column: x => x.CategoriasId,
+                        name: "FK_ProdutosCategorias_Categorias_CategoriaId",
+                        column: x => x.CategoriaId,
                         principalTable: "Categorias",
                         principalColumn: "PRD_ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CategoriaProduto_Product_ProdutosId",
-                        column: x => x.ProdutosId,
-                        principalTable: "Product",
+                        name: "FK_ProdutosCategorias_Produtos_ProdutoId",
+                        column: x => x.ProdutoId,
+                        principalTable: "Produtos",
                         principalColumn: "PRD_ID",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -250,9 +250,9 @@ namespace Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_CategoriaProduto_ProdutosId",
-                table: "CategoriaProduto",
-                column: "ProdutosId");
+                name: "IX_ProdutosCategorias_CategoriaId",
+                table: "ProdutosCategorias",
+                column: "CategoriaId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -273,7 +273,7 @@ namespace Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CategoriaProduto");
+                name: "ProdutosCategorias");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -285,7 +285,7 @@ namespace Infrastructure.Migrations
                 name: "Categorias");
 
             migrationBuilder.DropTable(
-                name: "Product");
+                name: "Produtos");
         }
     }
 }

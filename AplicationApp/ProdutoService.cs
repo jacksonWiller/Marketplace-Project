@@ -6,35 +6,36 @@ using AutoMapper;
 using Domain.Entity;
 using Domain.Interfaces;
 using Infrastructure.Repository;
-using Infrastructure.Repository.Interfaces;
+
 
 namespace AplicationApp
 {
     public class ProdutoService : IProdutoService
     {
         private readonly IProduto _repositoryProduto;
-        private readonly IGeneric<Produto> _repositoryGeneric;
+        private readonly IGeneric<Produto> _repositoryGenericProdutos;
+        private readonly IGeneric<ProdutosCategorias> _repositoryProdutosCategorias;
         private readonly IMapper _mapper;
         public ProdutoService(IGeneric<Produto> repositoryGeneric,
                               IProduto repositoryProduto,
                               IMapper mapper)
         {
             _repositoryProduto = repositoryProduto;
-            _repositoryGeneric = repositoryGeneric;
+            _repositoryGenericProdutos = repositoryGeneric;
             _mapper = mapper;
         }
 
-        public async Task<ProdutoDto> AddProduto(ProdutoDto produtoDto)
+        public async Task<ProdutoDto> AddProduto(ProdutoDto model)
         {
             try
             {
-                var evento = _mapper.Map<Produto>(produtoDto);
+                var produto = _mapper.Map<Produto>(model);
 
-                await _repositoryGeneric.Add(evento);
+                await _repositoryGenericProdutos.Add(produto);
 
-                if (await _repositoryGeneric.SaveChangesAsync())
+                if (await _repositoryGenericProdutos.SaveChangesAsync())
                 {
-                    var produtoRetorno = await _repositoryProduto.GetProdutoAsyncById(evento.Id);
+                    var produtoRetorno = await _repositoryProduto.GetProdutoAsyncById(produto.Id);
 
                     return _mapper.Map<ProdutoDto>(produtoRetorno);
                 }
@@ -57,9 +58,9 @@ namespace AplicationApp
 
                 _mapper.Map(model, produto);
 
-                await _repositoryGeneric.Update(produto);                
+                await _repositoryGenericProdutos.Update(produto);                
 
-                if (await _repositoryGeneric.SaveChangesAsync())
+                if (await _repositoryGenericProdutos.SaveChangesAsync())
                 {
                     var eventoRetorno = await _repositoryProduto.GetProdutoAsyncById(produto.Id);
 
@@ -79,8 +80,8 @@ namespace AplicationApp
             var produto = await _repositoryProduto.GetProdutoAsyncById(produtoId);
             if (produto == null) throw new Exception("Evento para delete não encontrado.");
 
-                await _repositoryGeneric.Delete(produto);
-            return await _repositoryGeneric.SaveChangesAsync();
+                await _repositoryGenericProdutos.Delete(produto);
+            return await _repositoryGenericProdutos.SaveChangesAsync();
         }
         catch (Exception ex)
         {
