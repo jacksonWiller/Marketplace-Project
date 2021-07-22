@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure.Repository;
 using Infrastructure.Repository.Gererics;
-using Infrastructure.Repository.Interfaces;
 using Infrastructure.Repository.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +26,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Domain.Interfaces;
 
 namespace Web.API
 {
@@ -94,7 +94,6 @@ namespace Web.API
                 };
             });
 
-
             services.AddControllers(config =>{
                 // using Microsoft.AspNetCore.Mvc.Authorization;
                 // using Microsoft.AspNetCore.Authorization;
@@ -103,18 +102,20 @@ namespace Web.API
                          .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
             })
-                    .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = 
+            .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = 
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                    );
+            );
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Web.API", Version = "v1" });
             });
+            services.AddScoped(typeof(IGeneric<>), typeof(RepositoryGeneric<>));
             services.AddScoped<IProdutoService, ProdutoService>();
-            services.AddScoped<IRepositoryGeneric, RepositoryGeneric>();
-            services.AddScoped<IRepositoryProduto, RepositoryProduto>();
+            services.AddScoped<ICategoriaService, CategoriaService>();
+            services.AddScoped<IProduto, RepositoryProduto>();
+            services.AddScoped<ICategoria, RepositoryCategoria>();
             services.AddCors();
         }
 

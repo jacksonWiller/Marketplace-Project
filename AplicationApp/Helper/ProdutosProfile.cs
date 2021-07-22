@@ -9,6 +9,8 @@ namespace AplicationApp.Helper
         public ProdutosProfile()
         {
              CreateMap<Produto, ProdutoDto>().ReverseMap();
+             CreateMap<Categoria, CategoriaDto>().ReverseMap();
+             
         }
     }
 }

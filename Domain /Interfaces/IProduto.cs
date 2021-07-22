@@ -6,7 +6,12 @@ namespace Domain.Interfaces
 {
     public interface IProduto
     {
-        Task<List<Produto[]>> ListarProdutos();
+        Task addProdutosAsync(Produto produto);
+
+        //PRODUTOS
+        Task<Produto[]> GetAllProdutosAsync();
+        Task<Produto[]> GetAllProdutosAsyncByNome( string nome);
+        Task<Produto> GetProdutoAsyncById(int ProdutosId);
     }
 
     

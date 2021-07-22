@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Domain.Identity;
 
+
 namespace ProAgil.Repository
 {
     public class DataContext : IdentityDbContext<User, Role, int,
@@ -13,6 +14,8 @@ namespace ProAgil.Repository
         public DataContext(DbContextOptions<DataContext> options) : base (options) {}
     
         public DbSet<Produto> Produtos {get;set;}
+        public DbSet<Categoria> Categorias {get;set;}
+        public DbSet<ProdutosCategorias> ProdutosCategorias {get;set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder )
         {
@@ -20,6 +23,20 @@ namespace ProAgil.Repository
 
             modelBuilder.Entity<UserRole>(userRole => 
                 {
+                
+                    modelBuilder.Entity<ProdutosCategorias>()
+                    .HasKey(PC => new {PC.ProdutoId, PC.CategoriaId});
+
+                    // modelBuilder.Entity<Produto>()
+                    // .HasMany(e => e.RedesSociais)
+                    // .WithOne(rs => rs.Evento)
+                    // .OnDelete(DeleteBehavior.Cascade);
+
+                    // modelBuilder.Entity<Palestrante>()
+                    // .HasMany(e => e.RedesSociais)
+                    // .WithOne(rs => rs.Palestrante)
+                    // .OnDelete(DeleteBehavior.Cascade);
+
                     userRole.HasKey(ur => new {ur.UserId, ur.RoleId});
 
                     userRole.HasOne(ur => ur.Role)

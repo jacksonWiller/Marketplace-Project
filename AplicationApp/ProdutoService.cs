@@ -4,22 +4,24 @@ using AplicationApp.Dtos;
 using AplicationApp.Interfaces;
 using AutoMapper;
 using Domain.Entity;
+using Domain.Interfaces;
 using Infrastructure.Repository;
-using Infrastructure.Repository.Interfaces;
+
 
 namespace AplicationApp
 {
     public class ProdutoService : IProdutoService
     {
-        private readonly IRepositoryProduto _repositoryProduto;
-        private readonly IRepositoryGeneric _repositoryGeneric;
+        private readonly IProduto _repositoryProduto;
+        private readonly IGeneric<Produto> _repositoryGenericProdutos;
+        private readonly IGeneric<ProdutosCategorias> _repositoryProdutosCategorias;
         private readonly IMapper _mapper;
-        public ProdutoService(IRepositoryGeneric repositoryGeneric,
-                              IRepositoryProduto repositoryProduto,
+        public ProdutoService(IGeneric<Produto> repositoryGeneric,
+                              IProduto repositoryProduto,
                               IMapper mapper)
         {
             _repositoryProduto = repositoryProduto;
-            _repositoryGeneric = repositoryGeneric;
+            _repositoryGenericProdutos = repositoryGeneric;
             _mapper = mapper;
         }
 
@@ -27,15 +29,15 @@ namespace AplicationApp
         {
             try
             {
-                var evento = _mapper.Map<Produto>(model);
+                var produto = _mapper.Map<Produto>(model);
 
-                _repositoryGeneric.Add<Produto>(evento);
+                await _repositoryGenericProdutos.Add(produto);
 
-                if (await _repositoryGeneric.SaveChangesAsync())
+                if (await _repositoryGenericProdutos.SaveChangesAsync())
                 {
-                    var eventoRetorno = await _repositoryProduto.GetProdutoAsyncById(evento.Id);
+                    var produtoRetorno = await _repositoryProduto.GetProdutoAsyncById(produto.Id);
 
-                    return _mapper.Map<ProdutoDto>(eventoRetorno);
+                    return _mapper.Map<ProdutoDto>(produtoRetorno);
                 }
                 return null;
             }
@@ -56,9 +58,9 @@ namespace AplicationApp
 
                 _mapper.Map(model, produto);
 
-                _repositoryGeneric.Update<Produto>(produto);                
+                await _repositoryGenericProdutos.Update(produto);                
 
-                if (await _repositoryGeneric.SaveChangesAsync())
+                if (await _repositoryGenericProdutos.SaveChangesAsync())
                 {
                     var eventoRetorno = await _repositoryProduto.GetProdutoAsyncById(produto.Id);
 
@@ -78,8 +80,8 @@ namespace AplicationApp
             var produto = await _repositoryProduto.GetProdutoAsyncById(produtoId);
             if (produto == null) throw new Exception("Evento para delete não encontrado.");
 
-            _repositoryGeneric.Delete<Produto>(produto);
-            return await _repositoryGeneric.SaveChangesAsync();
+                await _repositoryGenericProdutos.Delete(produto);
+            return await _repositoryGenericProdutos.SaveChangesAsync();
         }
         catch (Exception ex)
         {

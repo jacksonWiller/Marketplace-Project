@@ -16,21 +16,83 @@ namespace Infrastructure.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.7");
 
+            modelBuilder.Entity("Domain.Entity.Categoria", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("PRD_ID");
+
+                    b.Property<string>("Nome")
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("PRD_NOME");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categorias");
+                });
+
             modelBuilder.Entity("Domain.Entity.Produto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("PRD_ID");
+
+                    b.Property<DateTime>("DataAlteracao")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("PRD_DATA_ALTERACAO");
+
+                    b.Property<DateTime>("DataCadastro")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("PRD_DATA_CADASTRO");
+
+                    b.Property<string>("Descricao")
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("PRD_DESCRICAO");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("PRD_ESTADO");
 
                     b.Property<string>("Nome")
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(255)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("PRD_NOME");
 
-                    b.Property<int>("Quantidade")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Observacao")
+                        .HasMaxLength(20000)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("PRD_OBSERVACAO");
+
+                    b.Property<int>("QtdEstoque")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("PRD_QTD_ESTOQUE");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("PRD_VALO");
 
                     b.HasKey("Id");
 
                     b.ToTable("Produtos");
+                });
+
+            modelBuilder.Entity("Domain.Entity.ProdutosCategorias", b =>
+                {
+                    b.Property<int>("ProdutoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CategoriaId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ProdutoId", "CategoriaId");
+
+                    b.HasIndex("CategoriaId");
+
+                    b.ToTable("ProdutosCategorias");
                 });
 
             modelBuilder.Entity("Domain.Identity.Role", b =>
@@ -227,6 +289,21 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Domain.Entity.ProdutosCategorias", b =>
+                {
+                    b.HasOne("Domain.Entity.Categoria", null)
+                        .WithMany("ProdutosCategorias")
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entity.Produto", null)
+                        .WithMany("ProdutosCategorias")
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Identity.UserRole", b =>
                 {
                     b.HasOne("Domain.Identity.Role", "Role")
@@ -280,6 +357,16 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entity.Categoria", b =>
+                {
+                    b.Navigation("ProdutosCategorias");
+                });
+
+            modelBuilder.Entity("Domain.Entity.Produto", b =>
+                {
+                    b.Navigation("ProdutosCategorias");
                 });
 
             modelBuilder.Entity("Domain.Identity.Role", b =>
