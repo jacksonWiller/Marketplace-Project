@@ -189,24 +189,24 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProdutosCategorias",
+                name: "CategoriaProduto",
                 columns: table => new
                 {
-                    ProdutoId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CategoriaId = table.Column<int>(type: "INTEGER", nullable: false)
+                    CategoriasId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProdutosId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProdutosCategorias", x => new { x.ProdutoId, x.CategoriaId });
+                    table.PrimaryKey("PK_CategoriaProduto", x => new { x.CategoriasId, x.ProdutosId });
                     table.ForeignKey(
-                        name: "FK_ProdutosCategorias_Categorias_CategoriaId",
-                        column: x => x.CategoriaId,
+                        name: "FK_CategoriaProduto_Categorias_CategoriasId",
+                        column: x => x.CategoriasId,
                         principalTable: "Categorias",
                         principalColumn: "PRD_ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProdutosCategorias_Product_ProdutoId",
-                        column: x => x.ProdutoId,
+                        name: "FK_CategoriaProduto_Product_ProdutosId",
+                        column: x => x.ProdutosId,
                         principalTable: "Product",
                         principalColumn: "PRD_ID",
                         onDelete: ReferentialAction.Cascade);
@@ -250,9 +250,9 @@ namespace Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProdutosCategorias_CategoriaId",
-                table: "ProdutosCategorias",
-                column: "CategoriaId");
+                name: "IX_CategoriaProduto_ProdutosId",
+                table: "CategoriaProduto",
+                column: "ProdutosId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -273,7 +273,7 @@ namespace Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "ProdutosCategorias");
+                name: "CategoriaProduto");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

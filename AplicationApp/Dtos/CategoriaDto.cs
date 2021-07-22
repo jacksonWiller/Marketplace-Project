@@ -8,6 +8,6 @@ namespace AplicationApp.Dtos
         public int Id { get; set; }
         public string Nome { get; set; }
 
-        public IEnumerable<ProdutosCategorias> ProdutosCategorias { get; set; }
+        public ICollection<Produto> Produtos { get; set; }
     }
 }

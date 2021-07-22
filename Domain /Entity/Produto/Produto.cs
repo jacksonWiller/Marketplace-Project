@@ -8,22 +8,9 @@ using Domain.Interfaces;
 
 namespace Domain.Entity
 {
-    [Table("Product")]
+    [Table("Produtos")]
     public class Produto : Notifies
     {
-        public Produto(int id, string nome, string descricao, string observacao, decimal valor, int qtdEstoque, bool estado, DateTime dataCadastro, DateTime dataAlteracao)
-        {
-            Id = id;
-            Nome = nome;
-            Descricao = descricao;
-            Observacao = observacao;
-            Valor = valor;
-            QtdEstoque = qtdEstoque;
-            Estado = estado;
-            DataCadastro = dataCadastro;
-            DataAlteracao = dataAlteracao;
-        }
-
         [Column("PRD_ID")]
         [Display(Name = "Código")]
         public int Id { get; set; }
@@ -63,7 +50,7 @@ namespace Domain.Entity
         [Display(Name = "Data de Alteração")]
         public DateTime DataAlteracao { get; set; }
 
-        public IEnumerable<ProdutosCategorias> ProdutosCategorias { get; set; }
+        public ICollection<Categoria> Categorias { get; set; }
 
     }    
 }

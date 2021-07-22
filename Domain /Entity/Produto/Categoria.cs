@@ -15,7 +15,7 @@ namespace Domain.Entity
         [MaxLength(255)]
         public string Nome { get; set; }
 
-        public IEnumerable<ProdutosCategorias> ProdutosCategorias { get; set; }
+        public IEnumerable<Produto> Produtos { get; set; }
 
     }
 }

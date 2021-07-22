@@ -22,18 +22,18 @@ namespace ProAgil.Repository
             modelBuilder.Entity<UserRole>(userRole => 
                 {
                 
-                    modelBuilder.Entity<ProdutosCategorias>()
-                    .HasKey(PC => new {PC.ProdutoId, PC.CategoriaId});
+                    // modelBuilder.Entity<ProdutosCategorias>()
+                    // .HasKey(PC => new {PC.ProdutoId, PC.CategoriaId});
 
-                    modelBuilder.Entity<ProdutosCategorias>()
-                    .HasOne(pc => pc.Produto)
-                    .WithMany(pc => pc.ProdutosCategorias)
-                    .HasForeignKey(pc => pc.ProdutoId);
+                    // modelBuilder.Entity<ProdutosCategorias>()
+                    // .HasOne(pc => pc.Produto)
+                    // .WithMany(pc => pc.ProdutosCategorias)
+                    // .HasForeignKey(pc => pc.ProdutoId);
                     
-                    modelBuilder.Entity<ProdutosCategorias>()
-                    .HasOne(pc => pc.Categoria)
-                    .WithMany(pc => pc.ProdutosCategorias)
-                    .HasForeignKey(pc => pc.CategoriaId);
+                    // modelBuilder.Entity<ProdutosCategorias>()
+                    // .HasOne(pc => pc.Categoria)
+                    // .WithMany(pc => pc.ProdutosCategorias)
+                    // .HasForeignKey(pc => pc.CategoriaId);
 
                     // modelBuilder.Entity<Produto>()
                     // .HasMany(e => e.RedesSociais)

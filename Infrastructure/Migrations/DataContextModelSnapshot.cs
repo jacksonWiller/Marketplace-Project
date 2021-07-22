@@ -16,6 +16,21 @@ namespace Infrastructure.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.7");
 
+            modelBuilder.Entity("CategoriaProduto", b =>
+                {
+                    b.Property<int>("CategoriasId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProdutosId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("CategoriasId", "ProdutosId");
+
+                    b.HasIndex("ProdutosId");
+
+                    b.ToTable("CategoriaProduto");
+                });
+
             modelBuilder.Entity("Domain.Entity.Categoria", b =>
                 {
                     b.Property<int>("Id")
@@ -78,21 +93,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Product");
-                });
-
-            modelBuilder.Entity("Domain.Entity.ProdutosCategorias", b =>
-                {
-                    b.Property<int>("ProdutoId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("CategoriaId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ProdutoId", "CategoriaId");
-
-                    b.HasIndex("CategoriaId");
-
-                    b.ToTable("ProdutosCategorias");
                 });
 
             modelBuilder.Entity("Domain.Identity.Role", b =>
@@ -289,23 +289,19 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Domain.Entity.ProdutosCategorias", b =>
+            modelBuilder.Entity("CategoriaProduto", b =>
                 {
-                    b.HasOne("Domain.Entity.Categoria", "Categoria")
-                        .WithMany("ProdutosCategorias")
-                        .HasForeignKey("CategoriaId")
+                    b.HasOne("Domain.Entity.Categoria", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriasId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entity.Produto", "Produto")
-                        .WithMany("ProdutosCategorias")
-                        .HasForeignKey("ProdutoId")
+                    b.HasOne("Domain.Entity.Produto", null)
+                        .WithMany()
+                        .HasForeignKey("ProdutosId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Categoria");
-
-                    b.Navigation("Produto");
                 });
 
             modelBuilder.Entity("Domain.Identity.UserRole", b =>
@@ -361,16 +357,6 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Entity.Categoria", b =>
-                {
-                    b.Navigation("ProdutosCategorias");
-                });
-
-            modelBuilder.Entity("Domain.Entity.Produto", b =>
-                {
-                    b.Navigation("ProdutosCategorias");
                 });
 
             modelBuilder.Entity("Domain.Identity.Role", b =>

@@ -95,7 +95,6 @@ namespace Web.API
                 };
             });
 
-
             services.AddControllers(config =>{
                 // using Microsoft.AspNetCore.Mvc.Authorization;
                 // using Microsoft.AspNetCore.Authorization;
@@ -104,9 +103,9 @@ namespace Web.API
                          .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
             })
-                    .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = 
+            .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = 
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                    );
+            );
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddSwaggerGen(c =>
