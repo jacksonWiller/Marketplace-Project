@@ -14,7 +14,6 @@ namespace AplicationApp
     {
         private readonly IProduto _repositoryProduto;
         private readonly IGeneric<Produto> _repositoryGenericProdutos;
-        private readonly IGeneric<ProdutosCategorias> _repositoryProdutosCategorias;
         private readonly IMapper _mapper;
         public ProdutoService(IGeneric<Produto> repositoryGeneric,
                               IProduto repositoryProduto,

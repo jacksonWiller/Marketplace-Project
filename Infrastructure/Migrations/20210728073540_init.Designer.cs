@@ -9,7 +9,7 @@ using ProAgil.Repository;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210722094935_init")]
+    [Migration("20210728073540_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,16 +23,73 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasColumnName("PRD_ID");
+                        .HasColumnName("CATEGORIA_ID");
+
+                    b.Property<string>("Descricao")
+                        .HasMaxLength(150)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("CATEGORIA_DESCRICAO");
 
                     b.Property<string>("Nome")
                         .HasMaxLength(255)
                         .HasColumnType("TEXT")
-                        .HasColumnName("PRD_NOME");
+                        .HasColumnName("CATEGORIA_NOME");
 
                     b.HasKey("Id");
 
                     b.ToTable("Categorias");
+                });
+
+            modelBuilder.Entity("Domain.Entity.Compra", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("PRD_ID");
+
+                    b.Property<int?>("userId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("Compras");
+                });
+
+            modelBuilder.Entity("Domain.Entity.ItemPedido", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("ITEM_PEDIDO_ID");
+
+                    b.Property<int?>("CompraId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Observacao")
+                        .HasMaxLength(20000)
+                        .HasColumnType("TEXT")
+                        .HasColumnName("ITEM_PEDIDO_OBSERVACAO");
+
+                    b.Property<int>("Preco")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("ITEM_PEDIDO_PRECO");
+
+                    b.Property<int?>("ProdutoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("QtdItensPedidos")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("ITEM_PEDIDO_QUANTIDADE");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompraId");
+
+                    b.HasIndex("ProdutoId");
+
+                    b.ToTable("ItemPedido");
                 });
 
             modelBuilder.Entity("Domain.Entity.Produto", b =>
@@ -40,42 +97,42 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
-                        .HasColumnName("PRD_ID");
+                        .HasColumnName("PRODUTO_ID");
 
                     b.Property<DateTime>("DataAlteracao")
                         .HasColumnType("TEXT")
-                        .HasColumnName("PRD_DATA_ALTERACAO");
+                        .HasColumnName("PRODUTO_DATA_ALTERACAO");
 
                     b.Property<DateTime>("DataCadastro")
                         .HasColumnType("TEXT")
-                        .HasColumnName("PRD_DATA_CADASTRO");
+                        .HasColumnName("PRODUTO_DATA_CADASTRO");
 
                     b.Property<string>("Descricao")
                         .HasMaxLength(150)
                         .HasColumnType("TEXT")
-                        .HasColumnName("PRD_DESCRICAO");
+                        .HasColumnName("PRODUTO_DESCRICAO");
 
                     b.Property<bool>("Estado")
                         .HasColumnType("INTEGER")
-                        .HasColumnName("PRD_ESTADO");
+                        .HasColumnName("PRODUTO_ESTADO");
 
                     b.Property<string>("Nome")
                         .HasMaxLength(255)
                         .HasColumnType("TEXT")
-                        .HasColumnName("PRD_NOME");
+                        .HasColumnName("PRODUTO_NOME");
 
                     b.Property<string>("Observacao")
                         .HasMaxLength(20000)
                         .HasColumnType("TEXT")
-                        .HasColumnName("PRD_OBSERVACAO");
+                        .HasColumnName("PRODUTO_OBSERVACAO");
 
                     b.Property<int>("QtdEstoque")
                         .HasColumnType("INTEGER")
-                        .HasColumnName("PRD_QTD_ESTOQUE");
+                        .HasColumnName("PRODUTO_EM_ESTOQUE");
 
                     b.Property<decimal>("Valor")
                         .HasColumnType("TEXT")
-                        .HasColumnName("PRD_VALO");
+                        .HasColumnName("PRODUTO_VALO");
 
                     b.HasKey("Id");
 
@@ -128,7 +185,8 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("USER_ID");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
@@ -291,6 +349,30 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Domain.Entity.Compra", b =>
+                {
+                    b.HasOne("Domain.Identity.User", "user")
+                        .WithMany()
+                        .HasForeignKey("userId");
+
+                    b.Navigation("user");
+                });
+
+            modelBuilder.Entity("Domain.Entity.ItemPedido", b =>
+                {
+                    b.HasOne("Domain.Entity.Compra", "Compra")
+                        .WithMany("ItensDeCompra")
+                        .HasForeignKey("CompraId");
+
+                    b.HasOne("Domain.Entity.Produto", "Produto")
+                        .WithMany()
+                        .HasForeignKey("ProdutoId");
+
+                    b.Navigation("Compra");
+
+                    b.Navigation("Produto");
+                });
+
             modelBuilder.Entity("Domain.Entity.ProdutosCategorias", b =>
                 {
                     b.HasOne("Domain.Entity.Categoria", null)
@@ -364,6 +446,11 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Domain.Entity.Categoria", b =>
                 {
                     b.Navigation("ProdutosCategorias");
+                });
+
+            modelBuilder.Entity("Domain.Entity.Compra", b =>
+                {
+                    b.Navigation("ItensDeCompra");
                 });
 
             modelBuilder.Entity("Domain.Entity.Produto", b =>

@@ -116,6 +116,8 @@ namespace Web.API
             services.AddScoped<ICategoriaService, CategoriaService>();
             services.AddScoped<IProduto, RepositoryProduto>();
             services.AddScoped<ICategoria, RepositoryCategoria>();
+            services.AddScoped<ICompra, RepositoryCompra>();
+            services.AddScoped<ICompraService, CompraService>();
             services.AddCors();
         }
 
