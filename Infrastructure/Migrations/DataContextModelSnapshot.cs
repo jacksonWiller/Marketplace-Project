@@ -45,12 +45,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("PRD_ID");
 
-                    b.Property<int?>("userId")
+                    b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("userId");
 
                     b.ToTable("Compras");
                 });
@@ -62,7 +60,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("ITEM_PEDIDO_ID");
 
-                    b.Property<int?>("CompraId")
+                    b.Property<int>("CompraId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Observacao")
@@ -74,7 +72,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("ITEM_PEDIDO_PRECO");
 
-                    b.Property<int?>("ProdutoId")
+                    b.Property<int>("ProdutoId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("QtdItensPedidos")
@@ -347,24 +345,19 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Domain.Entity.Compra", b =>
-                {
-                    b.HasOne("Domain.Identity.User", "user")
-                        .WithMany()
-                        .HasForeignKey("userId");
-
-                    b.Navigation("user");
-                });
-
             modelBuilder.Entity("Domain.Entity.ItemPedido", b =>
                 {
                     b.HasOne("Domain.Entity.Compra", "Compra")
                         .WithMany("ItensDeCompra")
-                        .HasForeignKey("CompraId");
+                        .HasForeignKey("CompraId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entity.Produto", "Produto")
                         .WithMany()
-                        .HasForeignKey("ProdutoId");
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Compra");
 
@@ -373,17 +366,21 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entity.ProdutosCategorias", b =>
                 {
-                    b.HasOne("Domain.Entity.Categoria", null)
+                    b.HasOne("Domain.Entity.Categoria", "Categoria")
                         .WithMany("ProdutosCategorias")
                         .HasForeignKey("CategoriaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entity.Produto", null)
+                    b.HasOne("Domain.Entity.Produto", "Produto")
                         .WithMany("ProdutosCategorias")
                         .HasForeignKey("ProdutoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Categoria");
+
+                    b.Navigation("Produto");
                 });
 
             modelBuilder.Entity("Domain.Identity.UserRole", b =>

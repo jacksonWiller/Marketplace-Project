@@ -9,7 +9,7 @@ namespace AplicationApp.Dtos
     public class CompraDto
     {
         public int Id { get; set; }
-        public UserDto user { get; set; }
+        public int UserId { get; set; }
         public ICollection<ItemPedidoDto> ItensDeCompra { get; set; }
     }
 }

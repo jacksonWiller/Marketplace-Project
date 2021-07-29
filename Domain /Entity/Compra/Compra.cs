@@ -10,7 +10,8 @@ namespace Domain.Entity
         [Column("PRD_ID")]
         [Display(Name = "Código")]
         public int Id { get; set; }
-        public User user { get; set; }
+        public int UserId { get; set; }
+        public virtual User User { get; set; }
         public ICollection<ItemPedido> ItensDeCompra { get; set; }
     }
 }

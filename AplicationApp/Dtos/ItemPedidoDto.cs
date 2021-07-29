@@ -8,6 +8,6 @@ namespace AplicationApp.Dtos
         public int Preco { get; set; }
         public int QtdItensPedidos { get; set; }
         public string Observacao { get; set; }
-        public ProdutoDto Item { get; set; }
+        public int ProdutoId { get; set; }
     }
 }

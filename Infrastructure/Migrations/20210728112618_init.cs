@@ -64,6 +64,19 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Compras",
+                columns: table => new
+                {
+                    PRD_ID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Compras", x => x.PRD_ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Produtos",
                 columns: table => new
                 {
@@ -190,22 +203,32 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Compras",
+                name: "ItemPedido",
                 columns: table => new
                 {
-                    PRD_ID = table.Column<int>(type: "INTEGER", nullable: false)
+                    ITEM_PEDIDO_ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    userId = table.Column<int>(type: "INTEGER", nullable: true)
+                    ITEM_PEDIDO_PRECO = table.Column<int>(type: "INTEGER", nullable: false),
+                    ITEM_PEDIDO_QUANTIDADE = table.Column<int>(type: "INTEGER", nullable: false),
+                    ITEM_PEDIDO_OBSERVACAO = table.Column<string>(type: "TEXT", maxLength: 20000, nullable: true),
+                    ProdutoId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CompraId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Compras", x => x.PRD_ID);
+                    table.PrimaryKey("PK_ItemPedido", x => x.ITEM_PEDIDO_ID);
                     table.ForeignKey(
-                        name: "FK_Compras_AspNetUsers_userId",
-                        column: x => x.userId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "USER_ID",
-                        onDelete: ReferentialAction.Restrict);
+                        name: "FK_ItemPedido_Compras_CompraId",
+                        column: x => x.CompraId,
+                        principalTable: "Compras",
+                        principalColumn: "PRD_ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ItemPedido_Produtos_ProdutoId",
+                        column: x => x.ProdutoId,
+                        principalTable: "Produtos",
+                        principalColumn: "PRODUTO_ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -230,35 +253,6 @@ namespace Infrastructure.Migrations
                         principalTable: "Produtos",
                         principalColumn: "PRODUTO_ID",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ItemPedido",
-                columns: table => new
-                {
-                    ITEM_PEDIDO_ID = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ITEM_PEDIDO_PRECO = table.Column<int>(type: "INTEGER", nullable: false),
-                    ITEM_PEDIDO_QUANTIDADE = table.Column<int>(type: "INTEGER", nullable: false),
-                    ITEM_PEDIDO_OBSERVACAO = table.Column<string>(type: "TEXT", maxLength: 20000, nullable: true),
-                    ProdutoId = table.Column<int>(type: "INTEGER", nullable: true),
-                    CompraId = table.Column<int>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ItemPedido", x => x.ITEM_PEDIDO_ID);
-                    table.ForeignKey(
-                        name: "FK_ItemPedido_Compras_CompraId",
-                        column: x => x.CompraId,
-                        principalTable: "Compras",
-                        principalColumn: "PRD_ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ItemPedido_Produtos_ProdutoId",
-                        column: x => x.ProdutoId,
-                        principalTable: "Produtos",
-                        principalColumn: "PRODUTO_ID",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -297,11 +291,6 @@ namespace Infrastructure.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Compras_userId",
-                table: "Compras",
-                column: "userId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ItemPedido_CompraId",
@@ -346,6 +335,9 @@ namespace Infrastructure.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
                 name: "Compras");
 
             migrationBuilder.DropTable(
@@ -353,9 +345,6 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Produtos");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
         }
     }
 }

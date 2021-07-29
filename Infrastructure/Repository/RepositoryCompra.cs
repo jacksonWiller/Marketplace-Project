@@ -11,6 +11,11 @@ namespace Infrastructure.Repository
     {
         public readonly DataContext _dataContext;
 
+        public RepositoryCompra(DataContext dataContext)
+        {
+            _dataContext = dataContext;
+        }
+
         public async Task addCompraAsync(Compra compra){
             await _dataContext.Compras.AddAsync(compra);
             foreach (var itensDeCompra in compra.ItensDeCompra)
@@ -23,8 +28,15 @@ namespace Infrastructure.Repository
 
         public async Task<Compra[]> GetAllComprasAsync()
         {
+            System.Console.WriteLine("//////////////////REPOSITORIO DE COMPRA");
+           
             IQueryable<Compra> query = _dataContext.Compras;
 
+             query = query.AsNoTracking().OrderBy(ic => ic.Id)
+                .Include(ic => ic.ItensDeCompra);
+            
+            
+            System.Console.WriteLine(query.ToArrayAsync());
             return await query.ToArrayAsync();
         }
         public async Task<Compra[]> GetAllCompraAsyncByNome(string nome)

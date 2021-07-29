@@ -87,8 +87,10 @@ namespace AplicationApp
         }
         public async Task<CompraDto[]> GetAllComprasAsync()
         {
+            
             try
             {
+                System.Console.WriteLine("//////////////////SERVICE DE COMPRA");
                 var compras = await _repositoryCompra.GetAllComprasAsync();
                 if (compras == null) return null;
 

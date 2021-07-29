@@ -21,13 +21,10 @@ namespace Domain.Entity
         [Display(Name = "Observação")]
         [MaxLength(20000)]
         public string Observacao { get; set; }
-
-       
-        public Produto Produto { get; set; }
-
-       
-        public Compra Compra { get; set; }
-
+        public int ProdutoId { get; set; }
+        public virtual Produto Produto { get; set; }
+        public int CompraId { get; set; }
+        public virtual Compra Compra { get; set; }
 
     }
 }

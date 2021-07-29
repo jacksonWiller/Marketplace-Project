@@ -1,19 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using AplicationApp.Dtos;
-using AutoMapper;
-using Domain.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Configuration;
 using AplicationApp.Interfaces;
 
 namespace Web.API.Controllers
@@ -35,14 +25,15 @@ namespace Web.API.Controllers
         {
             try
             {
-                var produtos = await _compraService.GetAllComprasAsync();
-                if (produtos == null) return NoContent();
-                return Ok(produtos);
+                var compras = await _compraService.GetAllComprasAsync();
+                if (compras == null) return NoContent();
+                return Ok(compras);
             }
             catch (System.Exception ex)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, 
                 $"Banco Dados Falhou {ex.Message}");
+                
             }
         }
         [HttpGet("{nome}/nome")]
@@ -68,13 +59,13 @@ namespace Web.API.Controllers
             try
             {
                 var categoria = await _compraService.GetCompraAsyncById(CategoriaId);
-
                 return Ok(categoria);
             }
             catch (System.Exception)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, 
                 "Banco Dados Falhou");
+                
             }
         }
          
@@ -86,7 +77,6 @@ namespace Web.API.Controllers
             {
                 // Produto produto;
                 var retorno = await _compraService.AddCompra(model);
-               
                 return Ok(retorno);
             }
             catch (Exception ex)
@@ -111,6 +101,7 @@ namespace Web.API.Controllers
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
                     $"Erro ao tentar atualizar eventos. Erro: {ex.Message}");
+                    
             }
         }
 
