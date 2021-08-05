@@ -20,18 +20,13 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("CATEGORIA_ID");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Descricao")
-                        .HasMaxLength(150)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("CATEGORIA_DESCRICAO");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
-                        .HasMaxLength(255)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("CATEGORIA_NOME");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -50,18 +45,22 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Compras");
                 });
 
             modelBuilder.Entity("Domain.Entity.ItemPedido", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("ITEM_PEDIDO_ID");
+                    b.Property<int>("ProdutoId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("CompraId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("INTEGER")
+                        .HasColumnName("ITEM_PEDIDO_ID");
 
                     b.Property<string>("Observacao")
                         .HasMaxLength(20000)
@@ -72,63 +71,51 @@ namespace Infrastructure.Migrations
                         .HasColumnType("INTEGER")
                         .HasColumnName("ITEM_PEDIDO_PRECO");
 
-                    b.Property<int>("ProdutoId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid?>("ProdutoId1")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("QtdItensPedidos")
                         .HasColumnType("INTEGER")
                         .HasColumnName("ITEM_PEDIDO_QUANTIDADE");
 
-                    b.HasKey("Id");
+                    b.HasKey("ProdutoId", "CompraId");
 
                     b.HasIndex("CompraId");
 
-                    b.HasIndex("ProdutoId");
+                    b.HasIndex("ProdutoId1");
 
                     b.ToTable("ItemPedido");
                 });
 
             modelBuilder.Entity("Domain.Entity.Produto", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("PRODUTO_ID");
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DataAlteracao")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("PRODUTO_DATA_ALTERACAO");
+                    b.Property<DateTime>("DataDeAlteracao")
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DataCadastro")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("PRODUTO_DATA_CADASTRO");
+                    b.Property<DateTime>("DataDeCriacao")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Descricao")
-                        .HasMaxLength(150)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("PRODUTO_DESCRICAO");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("Estado")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("PRODUTO_ESTADO");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Nome")
-                        .HasMaxLength(255)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("PRODUTO_NOME");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Observacao")
-                        .HasMaxLength(20000)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("PRODUTO_OBSERVACAO");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("QtdEstoque")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("PRODUTO_EM_ESTOQUE");
+                    b.Property<int>("QuantidadeEmEstoque")
+                        .HasColumnType("INTEGER");
 
                     b.Property<decimal>("Valor")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("PRODUTO_VALO");
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -143,9 +130,14 @@ namespace Infrastructure.Migrations
                     b.Property<int>("CategoriaId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid?>("ProdutoId1")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("ProdutoId", "CategoriaId");
 
                     b.HasIndex("CategoriaId");
+
+                    b.HasIndex("ProdutoId1");
 
                     b.ToTable("ProdutosCategorias");
                 });
@@ -345,6 +337,17 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Domain.Entity.Compra", b =>
+                {
+                    b.HasOne("Domain.Identity.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Entity.ItemPedido", b =>
                 {
                     b.HasOne("Domain.Entity.Compra", "Compra")
@@ -355,9 +358,7 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("Domain.Entity.Produto", "Produto")
                         .WithMany()
-                        .HasForeignKey("ProdutoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProdutoId1");
 
                     b.Navigation("Compra");
 
@@ -374,9 +375,7 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("Domain.Entity.Produto", "Produto")
                         .WithMany("ProdutosCategorias")
-                        .HasForeignKey("ProdutoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProdutoId1");
 
                     b.Navigation("Categoria");
 

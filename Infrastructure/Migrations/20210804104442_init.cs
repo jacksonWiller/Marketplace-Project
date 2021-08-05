@@ -53,47 +53,33 @@ namespace Infrastructure.Migrations
                 name: "Categorias",
                 columns: table => new
                 {
-                    CATEGORIA_ID = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    CATEGORIA_NOME = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
-                    CATEGORIA_DESCRICAO = table.Column<string>(type: "TEXT", maxLength: 150, nullable: true)
+                    Nome = table.Column<string>(type: "TEXT", nullable: true),
+                    Descricao = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categorias", x => x.CATEGORIA_ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Compras",
-                columns: table => new
-                {
-                    PRD_ID = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Compras", x => x.PRD_ID);
+                    table.PrimaryKey("PK_Categorias", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Produtos",
                 columns: table => new
                 {
-                    PRODUTO_ID = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    PRODUTO_NOME = table.Column<string>(type: "TEXT", maxLength: 255, nullable: true),
-                    PRODUTO_DESCRICAO = table.Column<string>(type: "TEXT", maxLength: 150, nullable: true),
-                    PRODUTO_OBSERVACAO = table.Column<string>(type: "TEXT", maxLength: 20000, nullable: true),
-                    PRODUTO_VALO = table.Column<decimal>(type: "TEXT", nullable: false),
-                    PRODUTO_EM_ESTOQUE = table.Column<int>(type: "INTEGER", nullable: false),
-                    PRODUTO_ESTADO = table.Column<bool>(type: "INTEGER", nullable: false),
-                    PRODUTO_DATA_CADASTRO = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    PRODUTO_DATA_ALTERACAO = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Nome = table.Column<string>(type: "TEXT", nullable: true),
+                    Descricao = table.Column<string>(type: "TEXT", nullable: true),
+                    Observacao = table.Column<string>(type: "TEXT", nullable: true),
+                    Valor = table.Column<decimal>(type: "TEXT", nullable: false),
+                    QuantidadeEmEstoque = table.Column<int>(type: "INTEGER", nullable: false),
+                    Estado = table.Column<bool>(type: "INTEGER", nullable: false),
+                    DataDeCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DataDeAlteracao = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Produtos", x => x.PRODUTO_ID);
+                    table.PrimaryKey("PK_Produtos", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -203,31 +189,21 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ItemPedido",
+                name: "Compras",
                 columns: table => new
                 {
-                    ITEM_PEDIDO_ID = table.Column<int>(type: "INTEGER", nullable: false)
+                    PRD_ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ITEM_PEDIDO_PRECO = table.Column<int>(type: "INTEGER", nullable: false),
-                    ITEM_PEDIDO_QUANTIDADE = table.Column<int>(type: "INTEGER", nullable: false),
-                    ITEM_PEDIDO_OBSERVACAO = table.Column<string>(type: "TEXT", maxLength: 20000, nullable: true),
-                    ProdutoId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CompraId = table.Column<int>(type: "INTEGER", nullable: false)
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ItemPedido", x => x.ITEM_PEDIDO_ID);
+                    table.PrimaryKey("PK_Compras", x => x.PRD_ID);
                     table.ForeignKey(
-                        name: "FK_ItemPedido_Compras_CompraId",
-                        column: x => x.CompraId,
-                        principalTable: "Compras",
-                        principalColumn: "PRD_ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ItemPedido_Produtos_ProdutoId",
-                        column: x => x.ProdutoId,
-                        principalTable: "Produtos",
-                        principalColumn: "PRODUTO_ID",
+                        name: "FK_Compras_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "USER_ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -236,7 +212,8 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     ProdutoId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CategoriaId = table.Column<int>(type: "INTEGER", nullable: false)
+                    CategoriaId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProdutoId1 = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -245,14 +222,43 @@ namespace Infrastructure.Migrations
                         name: "FK_ProdutosCategorias_Categorias_CategoriaId",
                         column: x => x.CategoriaId,
                         principalTable: "Categorias",
-                        principalColumn: "CATEGORIA_ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProdutosCategorias_Produtos_ProdutoId",
-                        column: x => x.ProdutoId,
+                        name: "FK_ProdutosCategorias_Produtos_ProdutoId1",
+                        column: x => x.ProdutoId1,
                         principalTable: "Produtos",
-                        principalColumn: "PRODUTO_ID",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ItemPedido",
+                columns: table => new
+                {
+                    ProdutoId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CompraId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ITEM_PEDIDO_ID = table.Column<int>(type: "INTEGER", nullable: false),
+                    ITEM_PEDIDO_PRECO = table.Column<int>(type: "INTEGER", nullable: false),
+                    ITEM_PEDIDO_QUANTIDADE = table.Column<int>(type: "INTEGER", nullable: false),
+                    ITEM_PEDIDO_OBSERVACAO = table.Column<string>(type: "TEXT", maxLength: 20000, nullable: true),
+                    ProdutoId1 = table.Column<Guid>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ItemPedido", x => new { x.ProdutoId, x.CompraId });
+                    table.ForeignKey(
+                        name: "FK_ItemPedido_Compras_CompraId",
+                        column: x => x.CompraId,
+                        principalTable: "Compras",
+                        principalColumn: "PRD_ID",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ItemPedido_Produtos_ProdutoId1",
+                        column: x => x.ProdutoId1,
+                        principalTable: "Produtos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -293,19 +299,29 @@ namespace Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Compras_UserId",
+                table: "Compras",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ItemPedido_CompraId",
                 table: "ItemPedido",
                 column: "CompraId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ItemPedido_ProdutoId",
+                name: "IX_ItemPedido_ProdutoId1",
                 table: "ItemPedido",
-                column: "ProdutoId");
+                column: "ProdutoId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProdutosCategorias_CategoriaId",
                 table: "ProdutosCategorias",
                 column: "CategoriaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProdutosCategorias_ProdutoId1",
+                table: "ProdutosCategorias",
+                column: "ProdutoId1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -335,9 +351,6 @@ namespace Infrastructure.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "Compras");
 
             migrationBuilder.DropTable(
@@ -345,6 +358,9 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Produtos");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

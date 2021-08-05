@@ -24,12 +24,19 @@ namespace AplicationApp
             _mapper = mapper;
         }
 
-        public async Task<ProdutoDto> AddProduto(ProdutoDto model)
+        public async Task<ProdutoDto> AddProduto(ProdutoDto produtoDto)
         {
             try
             {
-                var produto = _mapper.Map<Produto>(model);
+                //var produto = _mapper.Map<Produto>(model);
 
+                // Product product = 
+                // Product.Create(productDto.Name, productDto.Quantity, productDto.Cost, productCode);
+
+                Produto produto = Produto.Create(produtoDto.Nome, produtoDto.Descricao, 
+                                                    produtoDto.Observacao, produtoDto.Valor,
+                                                    produtoDto.QtdEstoque);
+                
                 await _repositoryGenericProdutos.Add(produto);
 
                 if (await _repositoryGenericProdutos.SaveChangesAsync())
@@ -46,7 +53,7 @@ namespace AplicationApp
             }
         }
 
-        public async Task<ProdutoDto> UpdateProduto(int produtoId, ProdutoDto model)
+        public async Task<ProdutoDto> UpdateProduto(Guid produtoId, ProdutoDto model)
         {
             try
             {   
@@ -72,7 +79,7 @@ namespace AplicationApp
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<bool> DeleteProduto(int produtoId)
+        public async Task<bool> DeleteProduto(Guid produtoId)
         {
             try
         {
@@ -120,7 +127,7 @@ namespace AplicationApp
             }
         }
 
-        public async Task<ProdutoDto> GetProdutoAsyncById(int produtosId)
+        public async Task<ProdutoDto> GetProdutoAsyncById(Guid produtosId)
         {
             try
             {

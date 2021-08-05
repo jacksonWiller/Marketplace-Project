@@ -7,6 +7,7 @@ using ProAgil.Repository;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Repository;
+using System;
 
 namespace Infrastructure.Repository.Repositories
 {
@@ -47,7 +48,7 @@ namespace Infrastructure.Repository.Repositories
 
         }
 
-         public async Task<Produto> GetProdutoAsyncById(int ProdutoId)
+         public async Task<Produto> GetProdutoAsyncById(Guid ProdutoId)
         {
             IQueryable<Produto> query = _dataContext.Produtos;
 
