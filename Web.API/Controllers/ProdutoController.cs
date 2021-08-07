@@ -36,10 +36,10 @@ namespace Web.Api.Controllers
                 if (produtos == null) return NoContent();
                 return Ok(produtos);
             }
-            catch (System.Exception ex)
+            catch (Exception exeption)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, 
-                $"Banco Dados Falhou {ex.Message}");
+                return this.StatusCode(StatusCodes.Status500InternalServerError,
+                    $"Falha ao tentar obter so produtos. Erro: {exeption.Message}");
             }
         }
         [HttpGet("{nome}/nome")]
@@ -52,10 +52,10 @@ namespace Web.Api.Controllers
 
                 return Ok(produto);
             }
-            catch (System.Exception)
+            catch (Exception exeption)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, 
-                "Banco Dados Falhou");
+                return this.StatusCode(StatusCodes.Status500InternalServerError,
+                    $"Falha ao tentar obter o produto por nome. Erro: {exeption.Message}");
             }
         }
         [HttpGet("{ProdutosId}")]
@@ -68,10 +68,10 @@ namespace Web.Api.Controllers
 
                 return Ok(produto);
             }
-            catch (System.Exception)
+            catch (Exception exeption)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, 
-                "Banco Dados Falhou");
+                return this.StatusCode(StatusCodes.Status500InternalServerError,
+                    $"Falha ao tentar obter o Produtos por Id. Erro: {exeption.Message}");
             }
         }
          
@@ -86,10 +86,10 @@ namespace Web.Api.Controllers
                
                 return Ok(retorno);
             }
-            catch (Exception ex)
+            catch (Exception exeption)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
-                    $"Erro ao tentar adicionar eventos. Erro: {ex.Message}");
+                    $"Falha ao tentar adicionar o produto. Erro: {exeption.Message}");
             }
         }
         [HttpPut("{id}")]
@@ -103,10 +103,10 @@ namespace Web.Api.Controllers
 
                 return Ok(evento);
             }
-            catch (Exception ex)
+            catch (Exception exeption)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
-                    $"Erro ao tentar atualizar eventos. Erro: {ex.Message}");
+                    $"Falha ao tentar atualizar o produto. Erro: {exeption.Message}");
             }
         }
 
@@ -123,10 +123,10 @@ namespace Web.Api.Controllers
                        ? Ok(new { message = "Deletado" }) 
                        : throw new Exception("Ocorreu um problem não específico ao tentar deletar Evento.");
             }
-            catch (Exception ex)
+            catch (Exception exeption)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
-                    $"Erro ao tentar deletar eventos. Erro: {ex.Message}");
+                    $"Falha ao tentar remover o produto. Erro: {exeption.Message}");
             }
         }
     

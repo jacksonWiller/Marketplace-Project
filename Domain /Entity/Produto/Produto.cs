@@ -13,7 +13,7 @@ namespace Domain.Entity
     {
         [Key]
         public Guid Id { get; protected set; }
-        public string Nome { get; protected set; }
+        public string Nome { get; protected set; }        
         public string Descricao { get; protected set; }
         public string Observacao { get; protected set; }
         public decimal Valor { get; protected set; }
@@ -21,15 +21,17 @@ namespace Domain.Entity
         public bool Estado { get; protected set; }
         public DateTime DataDeCriacao { get; protected set; }
         public DateTime DataDeAlteracao { get; protected set; }
-        public ICollection<ProdutosCategorias> ProdutosCategorias { get; set; }
+        public virtual ICollection<ProdutosCategorias> ProdutosCategorias { get; protected set; }
 
         public static Produto Create(string nome, string descricao, string observacao, decimal valor, 
-                                        int quantidadeEmEstoque)
+                                        int quantidadeEmEstoque,  
+                                        ICollection<ProdutosCategorias> produtosCategorias)
         {
-            return Create(Guid.NewGuid(), nome, descricao, observacao, valor, quantidadeEmEstoque);
+            return Create(Guid.NewGuid(), nome, descricao, observacao, valor, quantidadeEmEstoque, produtosCategorias);
         }
         public static Produto Create(Guid id, string nome, string descricao, string observacao, 
-                                        decimal valor, int quantidadeEmEstoque)
+                                        decimal valor, int quantidadeEmEstoque, 
+                                        ICollection<ProdutosCategorias> produtosCategorias)
         {
             Produto produto = new Produto()
             {
@@ -41,11 +43,11 @@ namespace Domain.Entity
                 Estado = true,
                 DataDeCriacao = DateTime.Now,
                 DataDeAlteracao = DateTime.Now,
-               
-            };  
+                ProdutosCategorias = produtosCategorias
+            }; 
+
             return produto;         
         }
-
     }    
 }
 

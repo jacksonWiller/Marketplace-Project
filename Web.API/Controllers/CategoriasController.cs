@@ -53,7 +53,7 @@ namespace Web.API.Controllers
         }
         [HttpGet("{CategoriaId}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Get(int CategoriaId)
+        public async Task<IActionResult> Get(Guid CategoriaId)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace Web.API.Controllers
         }
         [HttpPut("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Put(int id, CategoriaDto model)
+        public async Task<IActionResult> Put(Guid id, CategoriaDto model)
         {
             try
             {
@@ -105,7 +105,7 @@ namespace Web.API.Controllers
 
         [HttpDelete("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {

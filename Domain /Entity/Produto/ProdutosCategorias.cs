@@ -7,9 +7,16 @@ namespace Domain.Entity
     public class ProdutosCategorias
     {
         public Guid ProdutoId {get; set;}
-        public virtual Produto Produto { get; set; }
-        public int CategoriaId {get; set;}
-        public virtual Categoria Categoria { get; set; }
+        public Guid CategoriaId {get; set;}
+    
+        public static ProdutosCategorias Create(Guid produtoId, Guid categoriaId)
+        {
+            return new ProdutosCategorias()
+            {
+                ProdutoId = produtoId,
+                CategoriaId = categoriaId
+            };
+        }
 
     }
 }

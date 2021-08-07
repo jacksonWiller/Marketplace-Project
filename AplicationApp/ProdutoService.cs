@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AplicationApp.Dtos;
 using AplicationApp.Interfaces;
@@ -28,16 +29,19 @@ namespace AplicationApp
         {
             try
             {
-                //var produto = _mapper.Map<Produto>(model);
+                var produto = _mapper.Map<Produto>(produtoDto);
 
                 // Product product = 
                 // Product.Create(productDto.Name, productDto.Quantity, productDto.Cost, productCode);
 
-                Produto produto = Produto.Create(produtoDto.Nome, produtoDto.Descricao, 
-                                                    produtoDto.Observacao, produtoDto.Valor,
-                                                    produtoDto.QtdEstoque);
+                 
+                produto = Produto.Create(produto.Nome, produto.Descricao, 
+                                                    produto.Observacao, produto.Valor,
+                                                    produto.QuantidadeEmEstoque,
+                                                    produto.ProdutosCategorias);
                 
                 await _repositoryGenericProdutos.Add(produto);
+                Console.WriteLine(produto.ProdutosCategorias);
 
                 if (await _repositoryGenericProdutos.SaveChangesAsync())
                 {

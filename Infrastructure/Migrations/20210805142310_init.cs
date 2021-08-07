@@ -53,8 +53,7 @@ namespace Infrastructure.Migrations
                 name: "Categorias",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Nome = table.Column<string>(type: "TEXT", nullable: true),
                     Descricao = table.Column<string>(type: "TEXT", nullable: true)
                 },
@@ -211,9 +210,8 @@ namespace Infrastructure.Migrations
                 name: "ProdutosCategorias",
                 columns: table => new
                 {
-                    ProdutoId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CategoriaId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ProdutoId1 = table.Column<Guid>(type: "TEXT", nullable: true)
+                    ProdutoId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CategoriaId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -225,11 +223,11 @@ namespace Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProdutosCategorias_Produtos_ProdutoId1",
-                        column: x => x.ProdutoId1,
+                        name: "FK_ProdutosCategorias_Produtos_ProdutoId",
+                        column: x => x.ProdutoId,
                         principalTable: "Produtos",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -317,11 +315,6 @@ namespace Infrastructure.Migrations
                 name: "IX_ProdutosCategorias_CategoriaId",
                 table: "ProdutosCategorias",
                 column: "CategoriaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProdutosCategorias_ProdutoId1",
-                table: "ProdutosCategorias",
-                column: "ProdutoId1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

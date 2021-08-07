@@ -9,7 +9,7 @@ using ProAgil.Repository;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210804104442_init")]
+    [Migration("20210805142310_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,9 +20,9 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entity.Categoria", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Descricao")
                         .HasColumnType("TEXT");
@@ -126,20 +126,15 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entity.ProdutosCategorias", b =>
                 {
-                    b.Property<int>("ProdutoId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("ProdutoId")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("CategoriaId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid?>("ProdutoId1")
+                    b.Property<Guid>("CategoriaId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ProdutoId", "CategoriaId");
 
                     b.HasIndex("CategoriaId");
-
-                    b.HasIndex("ProdutoId1");
 
                     b.ToTable("ProdutosCategorias");
                 });
@@ -377,7 +372,9 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("Domain.Entity.Produto", "Produto")
                         .WithMany("ProdutosCategorias")
-                        .HasForeignKey("ProdutoId1");
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Categoria");
 

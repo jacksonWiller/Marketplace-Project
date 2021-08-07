@@ -33,7 +33,7 @@ namespace Infrastructure.Repository.Repositories
             IQueryable<Produto> query = _dataContext.Produtos;
                
             query = query.AsNoTracking().OrderBy(p => p.Id)
-            .Include(p => p.ProdutosCategorias);
+            .Include(pc => pc.ProdutosCategorias);
 
             return await query.ToArrayAsync();
         }
@@ -58,6 +58,5 @@ namespace Infrastructure.Repository.Repositories
             return await query.FirstOrDefaultAsync();
         }
 
-        
     }
 }
