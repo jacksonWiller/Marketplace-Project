@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AplicationApp.Dtos;
 using AplicationApp.Interfaces;
@@ -14,7 +15,6 @@ namespace AplicationApp
     {
         private readonly IProduto _repositoryProduto;
         private readonly IGeneric<Produto> _repositoryGenericProdutos;
-        private readonly IGeneric<ProdutosCategorias> _repositoryProdutosCategorias;
         private readonly IMapper _mapper;
         public ProdutoService(IGeneric<Produto> repositoryGeneric,
                               IProduto repositoryProduto,
@@ -25,13 +25,23 @@ namespace AplicationApp
             _mapper = mapper;
         }
 
-        public async Task<ProdutoDto> AddProduto(ProdutoDto model)
+        public async Task<ProdutoDto> AddProduto(ProdutoDto produtoDto)
         {
             try
             {
-                var produto = _mapper.Map<Produto>(model);
+                var produto = _mapper.Map<Produto>(produtoDto);
 
+                // Product product = 
+                // Product.Create(productDto.Name, productDto.Quantity, productDto.Cost, productCode);
+
+                 
+                produto = Produto.Create(produto.Nome, produto.Descricao, 
+                                                    produto.Observacao, produto.Valor,
+                                                    produto.QuantidadeEmEstoque,
+                                                    produto.ProdutosCategorias);
+                
                 await _repositoryGenericProdutos.Add(produto);
+                Console.WriteLine(produto.ProdutosCategorias);
 
                 if (await _repositoryGenericProdutos.SaveChangesAsync())
                 {
@@ -47,7 +57,7 @@ namespace AplicationApp
             }
         }
 
-        public async Task<ProdutoDto> UpdateProduto(int produtoId, ProdutoDto model)
+        public async Task<ProdutoDto> UpdateProduto(Guid produtoId, ProdutoDto model)
         {
             try
             {   
@@ -73,7 +83,7 @@ namespace AplicationApp
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<bool> DeleteProduto(int produtoId)
+        public async Task<bool> DeleteProduto(Guid produtoId)
         {
             try
         {
@@ -121,7 +131,7 @@ namespace AplicationApp
             }
         }
 
-        public async Task<ProdutoDto> GetProdutoAsyncById(int produtosId)
+        public async Task<ProdutoDto> GetProdutoAsyncById(Guid produtosId)
         {
             try
             {

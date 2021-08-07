@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain.Entity;
@@ -35,7 +36,7 @@ namespace Infrastructure.Repository.Repositories
 
         }
 
-         public async Task<Categoria> GetCategoriasAsyncById(int CategoriaId)
+         public async Task<Categoria> GetCategoriasAsyncById(Guid CategoriaId)
         {
             IQueryable<Categoria> query = _dataContext.Categorias;
 

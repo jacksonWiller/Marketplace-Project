@@ -1,10 +1,11 @@
+using System;
+
 namespace AplicationApp.Dtos
 {
     public class ProdutosCategoriasDto
     {
-        public int ProdutoId {get; set;}
-        public int CategoriaId {get; set;}
-
+        public Guid CategoriaId {get; set;}
+        public virtual CategoriaDto Categoria { get; set; }
 
     }
 }

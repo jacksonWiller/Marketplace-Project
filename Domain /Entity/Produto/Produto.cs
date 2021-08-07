@@ -11,47 +11,43 @@ namespace Domain.Entity
     [Table("Produtos")]
     public class Produto : Notifies
     {
-        [Column("PRD_ID")]
-        [Display(Name = "Código")]
-        public int Id { get; set; }
+        [Key]
+        public Guid Id { get; protected set; }
+        public string Nome { get; protected set; }        
+        public string Descricao { get; protected set; }
+        public string Observacao { get; protected set; }
+        public decimal Valor { get; protected set; }
+        public int QuantidadeEmEstoque { get; protected set; }
+        public bool Estado { get; protected set; }
+        public DateTime DataDeCriacao { get; protected set; }
+        public DateTime DataDeAlteracao { get; protected set; }
+        public virtual ICollection<ProdutosCategorias> ProdutosCategorias { get; protected set; }
 
-        [Column("PRD_NOME")]
-        [Display(Name = "Nome")]
-        [MaxLength(255)]
-        public string Nome { get; set; }
+        public static Produto Create(string nome, string descricao, string observacao, decimal valor, 
+                                        int quantidadeEmEstoque,  
+                                        ICollection<ProdutosCategorias> produtosCategorias)
+        {
+            return Create(Guid.NewGuid(), nome, descricao, observacao, valor, quantidadeEmEstoque, produtosCategorias);
+        }
+        public static Produto Create(Guid id, string nome, string descricao, string observacao, 
+                                        decimal valor, int quantidadeEmEstoque, 
+                                        ICollection<ProdutosCategorias> produtosCategorias)
+        {
+            Produto produto = new Produto()
+            {
+                Nome = nome,
+                Descricao = descricao,
+                Observacao = observacao,
+                Valor = valor,
+                QuantidadeEmEstoque = quantidadeEmEstoque,
+                Estado = true,
+                DataDeCriacao = DateTime.Now,
+                DataDeAlteracao = DateTime.Now,
+                ProdutosCategorias = produtosCategorias
+            }; 
 
-        [Column("PRD_DESCRICAO")]
-        [Display(Name = "Descrição")]
-        [MaxLength(150)]
-        public string Descricao { get; set; }
-
-        [Column("PRD_OBSERVACAO")]
-        [Display(Name = "Observação")]
-        [MaxLength(20000)]
-        public string Observacao { get; set; }
-
-        [Column("PRD_VALO")]
-        [Display(Name = "Valor")]
-        public decimal Valor { get; set; }
-
-        [Column("PRD_QTD_ESTOQUE")]
-        [Display(Name = "Quantidade Estoque")]
-        public int QtdEstoque { get; set; }
-
-        [Column("PRD_ESTADO")]
-        [Display(Name = "Estado")]
-        public bool Estado { get; set; }
-
-        [Column("PRD_DATA_CADASTRO")]
-        [Display(Name = "Data de Cadastro")]
-        public DateTime DataCadastro { get; set; }
-
-        [Column("PRD_DATA_ALTERACAO")]
-        [Display(Name = "Data de Alteração")]
-        public DateTime DataAlteracao { get; set; }
-
-        public ICollection<ProdutosCategorias> ProdutosCategorias { get; set; }
-
+            return produto;         
+        }
     }    
 }
 

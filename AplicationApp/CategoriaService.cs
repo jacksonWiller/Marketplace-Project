@@ -44,7 +44,7 @@ namespace AplicationApp
             }
         }
 
-        public async Task<CategoriaDto> UpdateCategoria(int categoriaId, CategoriaDto model)
+        public async Task<CategoriaDto> UpdateCategoria(Guid categoriaId, CategoriaDto model)
         {
             try
             {   
@@ -70,7 +70,7 @@ namespace AplicationApp
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<bool> DeleteCategoria(int categoriaId)
+        public async Task<bool> DeleteCategoria(Guid categoriaId)
         {
             try
             {
@@ -118,7 +118,7 @@ namespace AplicationApp
             }
         }
 
-        public async Task<CategoriaDto> GetCategoriasAsyncById(int categoriaId)
+        public async Task<CategoriaDto> GetCategoriasAsyncById(Guid categoriaId)
         {
             try
             {

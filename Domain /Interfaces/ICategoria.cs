@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Domain.Entity;
 
@@ -8,6 +9,6 @@ namespace Domain.Interfaces
         //PRODUTOS
         Task<Categoria[]> GetAllCategoriasAsync();
         Task<Categoria[]> GetAllCategoriasAsyncByNome( string nome);
-        Task<Categoria> GetCategoriasAsyncById(int CategoriaId);
+        Task<Categoria> GetCategoriasAsyncById(Guid CategoriaId);
     }
 }

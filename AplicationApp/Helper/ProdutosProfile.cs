@@ -10,6 +10,9 @@ namespace AplicationApp.Helper
         {
              CreateMap<Produto, ProdutoDto>().ReverseMap();
              CreateMap<Categoria, CategoriaDto>().ReverseMap();
+             CreateMap<ProdutosCategorias, ProdutosCategoriasDto>().ReverseMap();
+             CreateMap<Compra, CompraDto>().ReverseMap(); 
+             CreateMap<ItemPedido, ItemPedidoDto>().ReverseMap(); 
              
         }
     }

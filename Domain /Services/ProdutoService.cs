@@ -23,7 +23,7 @@ namespace Domain.Service
 
             if (validaNome && validaValor)
             {
-                produto.Estado = true;
+                //produto.Estado = true;
                 await _IGeneric.Add(produto);
             }
         }

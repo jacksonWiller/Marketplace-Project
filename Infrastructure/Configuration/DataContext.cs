@@ -16,27 +16,37 @@ namespace ProAgil.Repository
         public DbSet<Produto> Produtos {get;set;}
         public DbSet<Categoria> Categorias {get;set;}
         public DbSet<ProdutosCategorias> ProdutosCategorias {get;set;}
-
+        public DbSet<Compra> Compras {get;set;}
+         public DbSet<ItemPedido> ItemPedido {get;set;}
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder )
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<UserRole>(userRole => 
-                {
-                
-                    modelBuilder.Entity<ProdutosCategorias>()
-                    .HasKey(PC => new {PC.ProdutoId, PC.CategoriaId});
+            modelBuilder.Entity<ProdutosCategorias>()
+                .HasKey(PC => new {PC.ProdutoId, PC.CategoriaId});
 
-                    // modelBuilder.Entity<Produto>()
-                    // .HasMany(e => e.RedesSociais)
-                    // .WithOne(rs => rs.Evento)
-                    // .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ItemPedido>()
+                .HasKey(PC => new {PC.ProdutoId, PC.CompraId});
+
+            // modelBuilder.Entity<ItemPedido>(itensPedido => 
+            //     {
+            //         itensPedido.HasKey(ip => new {ip.ProdutoId, ip.CompraId});
+
+            //     }
+
+            // );
+        
+                   
 
                     // modelBuilder.Entity<Palestrante>()
                     // .HasMany(e => e.RedesSociais)
                     // .WithOne(rs => rs.Palestrante)
                     // .OnDelete(DeleteBehavior.Cascade);
-
+            
+            modelBuilder.Entity<UserRole>(userRole => 
+                {
                     userRole.HasKey(ur => new {ur.UserId, ur.RoleId});
 
                     userRole.HasOne(ur => ur.Role)

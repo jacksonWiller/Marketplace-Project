@@ -1,22 +1,22 @@
 using System;
 using System.Threading.Tasks;
 using AplicationApp.Dtos;
-using AplicationApp.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using AplicationApp.Interfaces;
 
 namespace Web.API.Controllers
 {
-    [Route("api/Produtos/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class CategoriasController : ControllerBase
+    public class CompraController : ControllerBase
     {
-        private readonly ICategoriaService _categoriaService;
+        private readonly ICompraService _compraService;
         
-        public CategoriasController(ICategoriaService categoriaService)
+        public CompraController(ICompraService compraService)
         {
-            _categoriaService = categoriaService;
+            _compraService = compraService;
         }
 
         [HttpGet]
@@ -25,14 +25,15 @@ namespace Web.API.Controllers
         {
             try
             {
-                var produtos = await _categoriaService.GetAllCategoriasAsync();
-                if (produtos == null) return NoContent();
-                return Ok(produtos);
+                var compras = await _compraService.GetAllComprasAsync();
+                if (compras == null) return NoContent();
+                return Ok(compras);
             }
             catch (System.Exception ex)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, 
                 $"Banco Dados Falhou {ex.Message}");
+                
             }
         }
         [HttpGet("{nome}/nome")]
@@ -41,7 +42,7 @@ namespace Web.API.Controllers
         {
             try
             {
-                var categoria = await _categoriaService.GetAllCategoriasAsyncByNome(nome);
+                var categoria = await _compraService.GetAllComprasAsyncByNome(nome);
 
                 return Ok(categoria);
             }
@@ -53,30 +54,29 @@ namespace Web.API.Controllers
         }
         [HttpGet("{CategoriaId}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Get(Guid CategoriaId)
+        public async Task<IActionResult> Get(int CategoriaId)
         {
             try
             {
-                var categoria = await _categoriaService.GetCategoriasAsyncById(CategoriaId);
-
+                var categoria = await _compraService.GetCompraAsyncById(CategoriaId);
                 return Ok(categoria);
             }
             catch (System.Exception)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, 
                 "Banco Dados Falhou");
+                
             }
         }
          
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Post(CategoriaDto model)
+        public async Task<IActionResult> Post(CompraDto model)
         {
             try
             {
                 // Produto produto;
-                var retorno = await _categoriaService.AddCategoria(model);
-               
+                var retorno = await _compraService.AddCompra(model);
                 return Ok(retorno);
             }
             catch (Exception ex)
@@ -85,41 +85,43 @@ namespace Web.API.Controllers
                     $"Erro ao tentar adicionar eventos. Erro: {ex.Message}");
             }
         }
+        
         [HttpPut("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Put(Guid id, CategoriaDto model)
+        public async Task<IActionResult> Put(int id, CompraDto model)
         {
             try
             {
-                var evento = await _categoriaService.UpdateCategoria(id, model);
-                if (evento == null) return NoContent();
+                var compra = await _compraService.UpdateCompra(id, model);
+                if (compra == null) return NoContent();
 
-                return Ok(evento);
+                return Ok(compra);
             }
             catch (Exception ex)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
                     $"Erro ao tentar atualizar eventos. Erro: {ex.Message}");
+                    
             }
         }
 
         [HttpDelete("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                var produto = await _categoriaService.GetCategoriasAsyncById(id);
-                if (produto == null) return NoContent();
+                var compra = await _compraService.GetCompraAsyncById(id);
+                if (compra == null) return NoContent();
 
-                return await _categoriaService.DeleteCategoria(id) 
+                return await _compraService.DeleteCompra(id) 
                        ? Ok(new { message = "Deletado" }) 
-                       : throw new Exception("Ocorreu um problem não específico ao tentar deletar Evento.");
+                       : throw new Exception("Ocorreu um problem não específico ao tentar deletar Compra.");
             }
             catch (Exception ex)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
-                    $"Erro ao tentar deletar eventos. Erro: {ex.Message}");
+                    $"Erro ao tentar deletar compra. Erro: {ex.Message}");
             }
         }
     }

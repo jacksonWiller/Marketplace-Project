@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,15 +7,10 @@ namespace Domain.Entity
 {
     public class Categoria
     {
-        [Column("PRD_ID")]
-        [Display(Name = "Código")]
-        public int Id { get; set; }
-
-        [Column("PRD_NOME")]
-        [Display(Name = "Nome")]
-        [MaxLength(255)]
+        [Key]
+        public Guid Id { get; set; }
         public string Nome { get; set; }
-
+        public string Descricao { get; set; }
         public IEnumerable<ProdutosCategorias> ProdutosCategorias { get; set; }
 
     }
