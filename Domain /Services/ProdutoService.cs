@@ -6,38 +6,38 @@ namespace Domain.Service
 {
     public class ProdutoService
     {
-        private readonly IProduto _IProduct;
-        private readonly IGeneric<Produto> _IGeneric;
+        // private readonly IProduto _IProduct;
+        // private readonly IGeneric<Produto> _IGeneric;
 
-        public ProdutoService(IProduto IProduct, IGeneric<Produto> IGeneric)
-        {
-            _IProduct = IProduct;
-            _IGeneric = IGeneric;
-        }
+        // public ProdutoService(IProduto IProduct, IGeneric<Produto> IGeneric)
+        // {
+        //     _IProduct = IProduct;
+        //     _IGeneric = IGeneric;
+        // }
 
-        public async Task AddProduct(Produto produto)
-        {
-            var validaNome = produto.ValidarPropriedadeString(produto.Nome, "Nome");
+        // public async Task AddProduct(Produto produto)
+        // {
+        //     var validaNome = produto.ValidarPropriedadeString(produto.Nome, "Nome");
 
-            var validaValor = produto.ValidarPropriedadeDecimal(produto.Valor, "Valor");
+        //     var validaValor = produto.ValidarPropriedadeDecimal(produto.Valor, "Valor");
 
-            if (validaNome && validaValor)
-            {
-                //produto.Estado = true;
-                await _IGeneric.Add(produto);
-            }
-        }
+        //     if (validaNome && validaValor)
+        //     {
+        //         //produto.Estado = true;
+        //         await _IGeneric.Add(produto);
+        //     }
+        // }
 
-        public async Task UpdateProduct(Produto produto)
-        {
-            var validaNome = produto.ValidarPropriedadeString(produto.Nome, "Nome");
+        // public async Task UpdateProduct(Produto produto)
+        // {
+        //     var validaNome = produto.ValidarPropriedadeString(produto.Nome, "Nome");
 
-            var validaValor = produto.ValidarPropriedadeDecimal(produto.Valor, "Valor");
+        //     var validaValor = produto.ValidarPropriedadeDecimal(produto.Valor, "Valor");
 
-            if (validaNome && validaValor)
-            {
-                await _IGeneric.Update(produto);
-            }
-        }
+        //     if (validaNome && validaValor)
+        //     {
+        //         await _IGeneric.Update(produto);
+        //     }
+        // }
     }
 }

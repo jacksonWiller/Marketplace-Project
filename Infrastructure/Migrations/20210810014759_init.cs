@@ -55,7 +55,10 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Nome = table.Column<string>(type: "TEXT", nullable: true),
-                    Descricao = table.Column<string>(type: "TEXT", nullable: true)
+                    Descricao = table.Column<string>(type: "TEXT", nullable: true),
+                    Estado = table.Column<bool>(type: "INTEGER", nullable: false),
+                    DataDeCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    DataDeAlteracao = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
