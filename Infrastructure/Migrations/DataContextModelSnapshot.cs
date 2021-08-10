@@ -22,8 +22,17 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("DataDeAlteracao")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DataDeCriacao")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Descricao")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Nome")
                         .HasColumnType("TEXT");
@@ -362,21 +371,17 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entity.ProdutosCategorias", b =>
                 {
-                    b.HasOne("Domain.Entity.Categoria", "Categoria")
+                    b.HasOne("Domain.Entity.Categoria", null)
                         .WithMany("ProdutosCategorias")
                         .HasForeignKey("CategoriaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entity.Produto", "Produto")
+                    b.HasOne("Domain.Entity.Produto", null)
                         .WithMany("ProdutosCategorias")
                         .HasForeignKey("ProdutoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Categoria");
-
-                    b.Navigation("Produto");
                 });
 
             modelBuilder.Entity("Domain.Identity.UserRole", b =>

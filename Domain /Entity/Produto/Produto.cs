@@ -9,7 +9,7 @@ using Domain.Interfaces;
 namespace Domain.Entity
 {
     [Table("Produtos")]
-    public class Produto : Notifies
+    public class Produto : Base
     {
         [Key]
         public Guid Id { get; protected set; }
@@ -18,9 +18,6 @@ namespace Domain.Entity
         public string Observacao { get; protected set; }
         public decimal Valor { get; protected set; }
         public int QuantidadeEmEstoque { get; protected set; }
-        public bool Estado { get; protected set; }
-        public DateTime DataDeCriacao { get; protected set; }
-        public DateTime DataDeAlteracao { get; protected set; }
         public virtual ICollection<ProdutosCategorias> ProdutosCategorias { get; protected set; }
 
         public static Produto Create(string nome, string descricao, string observacao, decimal valor, 
