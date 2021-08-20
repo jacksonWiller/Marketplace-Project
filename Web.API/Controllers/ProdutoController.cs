@@ -119,9 +119,9 @@ namespace Web.Api.Controllers
                 var produto = await _produtoService.GetProdutoAsyncById(id);
                 if (produto == null) return NoContent();
 
-                return await _produtoService.DeleteProduto(id) 
-                       ? Ok(new { message = "Deletado" }) 
-                       : throw new Exception("Ocorreu um problem não específico ao tentar deletar Evento.");
+                await _produtoService.DeleteProduto(id);
+                return Ok(new { message = "Deletado" });              
+                    //    : throw new Exception("Ocorreu um problem não específico ao tentar deletar Evento.");
             }
             catch (Exception exeption)
             {
