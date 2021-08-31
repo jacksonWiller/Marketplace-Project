@@ -74,6 +74,7 @@ namespace Infrastructure.Migrations
                     Descricao = table.Column<string>(type: "TEXT", nullable: true),
                     Observacao = table.Column<string>(type: "TEXT", nullable: true),
                     Valor = table.Column<decimal>(type: "TEXT", nullable: false),
+                    ImagemURL = table.Column<string>(type: "TEXT", nullable: true),
                     QuantidadeEmEstoque = table.Column<int>(type: "INTEGER", nullable: false),
                     Estado = table.Column<bool>(type: "INTEGER", nullable: false),
                     DataDeCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),

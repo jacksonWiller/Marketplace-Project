@@ -38,6 +38,7 @@ namespace AplicationApp
                 produto = Produto.Create(produto.Nome, produto.Descricao, 
                                                     produto.Observacao, produto.Valor,
                                                     produto.QuantidadeEmEstoque,
+                                                    produto.ImagemURL,
                                                     produto.ProdutosCategorias);
                 
                 await _repositoryGenericProdutos.Add(produto);
