@@ -114,6 +114,9 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("Estado")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ImagemURL")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Nome")
                         .HasColumnType("TEXT");
 
