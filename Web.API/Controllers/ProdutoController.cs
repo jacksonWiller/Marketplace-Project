@@ -76,23 +76,12 @@ namespace Web.Api.Controllers
          
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Post(IFormFile file, ProdutoDto produto)
+        public async Task<IActionResult> Post(ProdutoDto produto)
         {
             try
             {
-                if (file.Length > 0)
-                {
-                    // DeleteImagem(produto.ImagemURL);
-                    produto.ImagemURL = await SaveImage(file);
-                }
-
-                // Produto produto;
                 var retorno = await _produtoService.AddProduto(produto);
 
-                // var file = Request.Form.Files[0];
-                // var file = imageFile;
-                
-               
                 return Ok(retorno);
             }
             catch (Exception exeption)
@@ -101,34 +90,6 @@ namespace Web.Api.Controllers
                     $"Falha ao tentar adicionar o produto. Erro: {exeption.Message}");
             }
         }
-
-        [HttpPost("upload-image/{produtoId}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Post(Guid produtoId)
-        {
-            try
-            {
-                var produto = await _produtoService.GetProdutoAsyncById(produtoId);
-
-                var file = Request.Form.Files[0];
-                if (file.Length > 0)
-                {
-                    DeleteImagem(produto.ImagemURL);
-                    produto.ImagemURL = await SaveImage(file);
-                }
-                
-                var ProdutoRetorno = await _produtoService.UpdateProduto(produtoId, produto);
-      
-                return Ok(ProdutoRetorno);
-            }
-            catch (System.Exception ex)
-            {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Banco Dados Falhou {ex.Message}");
-            }
-
-            // return BadRequest("Erro ao tentar realizar upload");
-        }
-
 
         [HttpPut("{id}")]
         [AllowAnonymous]
@@ -168,12 +129,44 @@ namespace Web.Api.Controllers
             }
         }
 
+
+        [HttpPost("upload-image/{produtoId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> UploadImage(Guid produtoId)
+        {
+            try
+            {
+                var produto = await _produtoService.GetProdutoAsyncById(produtoId);
+
+                var file = Request.Form.Files[0];
+                Console.Write("|||||||||||||||||||||||||||||||||||||||||||||||");
+                Console.WriteLine(file);
+                
+                if (file.Length > 0)
+                {
+                    // DeleteImagem(produto.ImagemURL);
+                    produto.ImagemURL = await SaveImage(file);
+                }
+                
+                var ProdutoRetorno = await _produtoService.UpdateProduto(produtoId, produto);
+      
+                return Ok(ProdutoRetorno);
+            }
+            catch (System.Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $" {ex.Message}");
+            }
+
+        }
+
+        // [HttpPost("upload-image2")]
+        // [AllowAnonymous]
         [NonAction]
         public async Task<string>  SaveImage(IFormFile imageFile)
         {
             try
             {
-                Console.WriteLine(imageFile);
+               
                string imageName = new String(Path.GetFileNameWithoutExtension(imageFile.FileName)
                                                 .Take(10)
                                                 .ToArray()
