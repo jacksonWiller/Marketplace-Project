@@ -41,22 +41,7 @@ namespace Web.Api.Controllers
                     $"Falha ao tentar obter so produtos. Erro: {exeption.Message}");
             }
         }
-        [HttpGet("{nome}/nome")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Get(string nome)
-        {
-            try
-            {
-                var produto = await _produtoService.GetAllProdutosAsyncByNome(nome);
 
-                return Ok(produto);
-            }
-            catch (Exception exeption)
-            {
-                return this.StatusCode(StatusCodes.Status500InternalServerError,
-                    $"Falha ao tentar obter o produto por nome. Erro: {exeption.Message}");
-            }
-        }
         [HttpGet("{ProdutosId}")]
         [AllowAnonymous]
         public async Task<IActionResult> Get(Guid ProdutosId)
@@ -73,16 +58,66 @@ namespace Web.Api.Controllers
                     $"Falha ao tentar obter o Produtos por Id. Erro: {exeption.Message}");
             }
         }
-         
-        [HttpPost]
+
+        [HttpGet("{nome}/nome")]
         [AllowAnonymous]
-        public async Task<IActionResult> Post(ProdutoDto produto)
+        public async Task<IActionResult> Get(string nome)
         {
             try
             {
-                var retorno = await _produtoService.AddProduto(produto);
+                var produto = await _produtoService.GetAllProdutosAsyncByNome(nome);
 
-                return Ok(retorno);
+                return Ok(produto);
+            }
+            catch (Exception exeption)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError,
+                    $"Falha ao tentar obter o produto por nome. Erro: {exeption.Message}");
+            }
+        }
+        
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Post([FromForm] ProdutoDto produto)
+        {
+            try
+            {
+                // var produto = Request.Form.Files[0]; 
+                // var file = produto.Imagem;
+                // if (file.Length > 0)
+                // {
+                //     produto.ImagemURL = await SaveImage(file);
+                // }
+
+                var retorno = await _produtoService.AddProduto(produto);
+                return Ok();
+            }
+            catch (Exception exeption)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError,
+                    $"Falha ao tentar adicionar o produto. Erro: {exeption.Message}");
+            }
+        }
+
+        [HttpPost("add-image")]
+        [AllowAnonymous]
+        public async Task<IActionResult> PostProdutoImage(IFormFile file)
+        {
+            try
+            {
+                // var file = Request.Form.Files[0];
+                // Console.Write("|||||||||||||||||||||||||||||||||||||||||||||||");
+                // Console.WriteLine(file);
+                
+                if (file.Length > 0)
+                {
+                    // DeleteImagem(produto.ImagemURL);
+                    // produto.ImagemURL = await SaveImage(file);
+                }
+                
+                // var retorno = await _produtoService.AddProduto(produto);
+
+                return Ok();
             }
             catch (Exception exeption)
             {
@@ -130,7 +165,7 @@ namespace Web.Api.Controllers
         }
 
 
-        [HttpPost("upload-image/{produtoId}")]
+        [HttpPut("upload-image/{produtoId}")]
         [AllowAnonymous]
         public async Task<IActionResult> UploadImage(Guid produtoId)
         {
@@ -145,7 +180,7 @@ namespace Web.Api.Controllers
                 if (file.Length > 0)
                 {
                     // DeleteImagem(produto.ImagemURL);
-                    produto.ImagemURL = await SaveImage(file);
+                    // produto.ImagemURL = await SaveImage(file);
                 }
                 
                 var ProdutoRetorno = await _produtoService.UpdateProduto(produtoId, produto);
@@ -166,7 +201,6 @@ namespace Web.Api.Controllers
         {
             try
             {
-               
                string imageName = new String(Path.GetFileNameWithoutExtension(imageFile.FileName)
                                                 .Take(10)
                                                 .ToArray()
@@ -184,52 +218,17 @@ namespace Web.Api.Controllers
             catch (Exception exeption)
             {
                 return exeption.ToString();
-            }
-
-            
+            }        
         }
-
-       [HttpPost("upload")]
-       public async Task<string> EnviaArquivo([FromForm] IFormFile arquivo)
-       {
-          if (arquivo.Length > 0)
-           {
-                try
-                {
-                    if (!Directory.Exists(_hostEnviroment.WebRootPath + "\\imagens\\"))
-                    {
-                        Directory.CreateDirectory(_hostEnviroment.WebRootPath + "\\imagens\\");
-                }
-                using (FileStream filestream = System.IO.File.Create(_hostEnviroment.WebRootPath + "\\imagens\\" + arquivo.FileName))
-                {
-                        await arquivo.CopyToAsync(filestream);
-                        filestream.Flush();
-                        return "\\imagens\\" + arquivo.FileName;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return ex.ToString();
-                }
-            }
-            else
-            {
-                return "Ocorreu uma falha no envio do arquivo...";
-            }
-        }
-
 
         [NonAction]
 
         public void DeleteImagem(string imageName)
         {
-            var imagePath = Path.Combine(_hostEnviroment.ContentRootPath, @"Resouses/Images", imageName);
+            var imagePath = Path.Combine(_hostEnviroment.ContentRootPath, @"Resources/Images", imageName);
             if (System.IO.File.Exists(imagePath))
                 System.IO.File.Delete(imagePath);
         }
-
-
-
 
     }
 }
