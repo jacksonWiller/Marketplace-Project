@@ -83,11 +83,15 @@ namespace Web.Api.Controllers
             try
             {
                 // var produto = Request.Form.Files[0]; 
-                // var file = produto.Imagem;
-                // if (file.Length > 0)
-                // {
-                //     produto.ImagemURL = await SaveImage(file);
-                // }
+                var file  = Request.Form.Files[0];
+                Console.Write("||||||||||||||||||||||||||||||||||||||||||");
+                 Console.WriteLine(produto.Imagem);
+                 Console.WriteLine(file);
+                 
+                     
+                        
+                produto.ImagemURL = await SaveImage(file);
+                     
 
                 var retorno = await _produtoService.AddProduto(produto);
                 return Ok();
