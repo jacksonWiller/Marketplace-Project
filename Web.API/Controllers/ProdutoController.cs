@@ -83,18 +83,17 @@ namespace Web.Api.Controllers
             try
             {
                 // var produto = Request.Form.Files[0]; 
-                var file  = Request.Form.Files[0];
-                Console.Write("||||||||||||||||||||||||||||||||||||||||||");
-                 Console.WriteLine(produto.Imagem);
-                 Console.WriteLine(file);
-                 
-                     
-                        
-                produto.ImagemURL = await SaveImage(file);
-                     
+                // var file  = Request.Form.Files[0];
+                // Console.Write("||||||||||||||||||||||||||||||||||||||||||");
+                //  Console.WriteLine(produto.Imagem);
+                //  Console.WriteLine(file);
+
+                if(produto.Imagem != null){
+                    produto.ImagemURL = await SaveImage(produto.Imagem);
+                }
 
                 var retorno = await _produtoService.AddProduto(produto);
-                return Ok();
+                return Ok(retorno);
             }
             catch (Exception exeption)
             {
