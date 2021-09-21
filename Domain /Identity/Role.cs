@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -6,8 +7,8 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Identity
 {
-    public class Role : IdentityRole<int>
+    public class Role : IdentityRole<Guid>
     {
-        public List<UserRole> UserRoles { get; set; }
+      
     }
 }

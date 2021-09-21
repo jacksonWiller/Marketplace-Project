@@ -1,24 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Infrastructure.Repository;
-using Infrastructure.Repository.Gererics;
-using Infrastructure.Repository.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using ProAgil.Repository;
-using AplicationApp.Interfaces;
-using AplicationApp;
-using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Domain.Identity;
 using Microsoft.AspNetCore.Authorization;
@@ -26,10 +14,10 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Domain.Interfaces;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Web.API.Configurations;
 
 namespace Web.API
 {
@@ -49,63 +37,51 @@ namespace Web.API
                 context => context.UseSqlite(Configuration.GetConnectionString("Default"))
             );
 
-            IdentityBuilder builder = services.AddIdentityCore<User>(options => 
-            {
-                options.Password.RequireDigit = false; //caracteres especiais 
-                options.Password.RequireNonAlphanumeric = false; //num Alphanumerico
-                options.Password.RequireLowercase = false; 
-                options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 4;
-            });
+            
+            services.AddIdentity<User, Role>(options => {
+                    //Lockout
+                    // options.Lockout.AllowedForNewUsers = true;
+                    // options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                    // options.Lockout.MaxFailedAccessAttempts = 5;
 
-            builder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
-            builder.AddEntityFrameworkStores<DataContext>();
-            builder.AddRoleValidator<RoleValidator<Role>>();
-            builder.AddRoleManager<RoleManager<Role>>();
-            builder.AddSignInManager<SignInManager<User>>();
+                    //Password
+                    // options.Password.RequireDigit = true;
+                    // options.Password.RequiredLength = 6;
+                    // options.Password.RequiredUniqueChars = 1;
+                    // options.Password.RequireLowercase = true;
+                    // options.Password.RequireUppercase = true;
+                    // options.Password.RequireNonAlphanumeric = true;
 
-            // services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //     .AddJwtBearer(options => 
-            //         {
-            //             options.TokenValidationParameters = new TokenValidationParameters
-            //             {
-            //                 ValidateIssuerSigningKey = true,
-            //                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
-            //                     .GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
-            //                 ValidateIssuer = false,
-            //                 ValidateAudience = false
-            //             };
-            //         }
-            //     );
+                    //SignIn
+                    // options.SignIn.RequireConfirmedEmail = false;
+                    // options.SignIn.RequireConfirmedPhoneNumber = false;
 
-            var key = Encoding.ASCII.GetBytes(Settings.Secret);
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
+                    //Token
+                    //options.Tokens.AuthenticatorTokenProvider
+                    //options.Tokens.ChangeEmailTokenProvider
+                    //options.Tokens.ChangePhoneNumberTokenProvider
+                    //options.Tokens.EmailConfirmationTokenProvider
+                    //options.Tokens.PasswordResetTokenProvider
+
+                    //User
+                    // options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                    // options.User.RequireUniqueEmail = false;
+                })
+                .AddEntityFrameworkStores<DataContext>()
+                .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(option =>{
+                option.Cookie.HttpOnly = true;
+                option.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                
             });
 
             services.AddControllers(config =>{
-                // using Microsoft.AspNetCore.Mvc.Authorization;
-                // using Microsoft.AspNetCore.Authorization;
                 var policy = new AuthorizationPolicyBuilder()
                          .RequireAuthenticatedUser()
                          .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
-            })
-            .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = 
+            }).AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = 
                         Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -114,15 +90,9 @@ namespace Web.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Web.API", Version = "v1" });
             });
-            services.AddScoped(typeof(IGeneric<>), typeof(RepositoryGeneric<>));
-            services.AddScoped<IProdutoService, ProdutoService>();
-            services.AddScoped<ICategoriaService, CategoriaService>();
-            services.AddScoped<ICompraService, CompraService>();
-            
-            services.AddScoped<IProduto, RepositoryProduto>();
-            services.AddScoped<ICategoria, RepositoryCategoria>();
-            services.AddScoped<ICompra, RepositoryCompra>();
-            
+
+
+            services.AddDependencyInjectionConfiguration();
             services.AddCors();
         }
 
