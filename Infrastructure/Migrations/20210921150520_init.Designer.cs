@@ -9,7 +9,7 @@ using ProAgil.Repository;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210908123440_init")]
+    [Migration("20210921150520_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

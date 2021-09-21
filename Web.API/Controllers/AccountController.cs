@@ -54,8 +54,6 @@ namespace Web.API.Controllers
     {
         try
         {
-            if (ModelState.IsValid)
-            {
                 var user = new User
                 {
                     UserName = model.Email,
@@ -63,13 +61,12 @@ namespace Web.API.Controllers
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
-
                 if(result.Succeeded)
                 {
-
+                    return Created("GetUser", user);
                 }
-            }
-            return Ok(model);
+        
+            return BadRequest(result.Errors);
         }
         catch (System.Exception ex)
         {
