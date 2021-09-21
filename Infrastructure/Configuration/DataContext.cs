@@ -3,13 +3,11 @@ using Domain.Entity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Domain.Identity;
-
+using System;
 
 namespace ProAgil.Repository
 {
-    public class DataContext : IdentityDbContext<User, Role, int,
-                                    IdentityUserClaim<int>, UserRole, IdentityUserLogin<int>,
-                                    IdentityRoleClaim<int>, IdentityUserToken<int>>
+    public class DataContext : IdentityDbContext<User, Role, Guid>
     {
         public DataContext(DbContextOptions<DataContext> options) : base (options) {}
     
@@ -17,7 +15,7 @@ namespace ProAgil.Repository
         public DbSet<Categoria> Categorias {get;set;}
         public DbSet<ProdutosCategorias> ProdutosCategorias {get;set;}
         public DbSet<Compra> Compras {get;set;}
-         public DbSet<ItemPedido> ItemPedido {get;set;}
+        public DbSet<ItemPedido> ItemPedido {get;set;}
         
         protected override void OnModelCreating(ModelBuilder modelBuilder )
         {
@@ -29,37 +27,6 @@ namespace ProAgil.Repository
 
             modelBuilder.Entity<ItemPedido>()
                 .HasKey(PC => new {PC.ProdutoId, PC.CompraId});
-
-            // modelBuilder.Entity<ItemPedido>(itensPedido => 
-            //     {
-            //         itensPedido.HasKey(ip => new {ip.ProdutoId, ip.CompraId});
-
-            //     }
-
-            // );
-        
-                   
-
-                    // modelBuilder.Entity<Palestrante>()
-                    // .HasMany(e => e.RedesSociais)
-                    // .WithOne(rs => rs.Palestrante)
-                    // .OnDelete(DeleteBehavior.Cascade);
-            
-            modelBuilder.Entity<UserRole>(userRole => 
-                {
-                    userRole.HasKey(ur => new {ur.UserId, ur.RoleId});
-
-                    userRole.HasOne(ur => ur.Role)
-                        .WithMany(r => r.UserRoles)
-                        .HasForeignKey(ur => ur.RoleId)
-                        .IsRequired();
-                    
-                    userRole.HasOne(ur => ur.User)
-                        .WithMany(r => r.UserRoles)
-                        .HasForeignKey(ur => ur.UserId)
-                        .IsRequired();
-                }
-            );
             
         }
     

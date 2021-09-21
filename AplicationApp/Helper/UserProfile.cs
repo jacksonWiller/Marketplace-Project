@@ -9,8 +9,8 @@ namespace AplicationApp.Helper
     {
         public UserProfile()
         {
-             CreateMap<User, UserDto>().ReverseMap();
-             CreateMap<User, UserLoginDto>().ReverseMap();
+            CreateMap<User, RegisterDto>().ReverseMap();
+            //  CreateMap<User, UserLoginDto>().ReverseMap();
         }
     }
 }
