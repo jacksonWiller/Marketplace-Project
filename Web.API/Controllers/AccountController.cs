@@ -48,6 +48,21 @@ namespace Web.API.Controllers
         return Ok(new RegisterDto());
     }
 
+    [HttpGet("GetUserSingIn")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetUserSingIn()
+    {
+        return Ok(_userManager.GetUserAsync(User));
+    }
+
+    [HttpPost("Logout")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        return Ok("Deslogado");
+    }
+
     [HttpPost("Register")]
     [AllowAnonymous]
     public async Task<IActionResult> Register([FromForm] RegisterDto model)
@@ -76,6 +91,7 @@ namespace Web.API.Controllers
 
     [HttpPost("Login")]
     [AllowAnonymous]
+    
         public async Task<IActionResult> Login ([FromForm] LoginDto model)
         {
           try
@@ -87,7 +103,7 @@ namespace Web.API.Controllers
 
                 if (result.Succeeded)
                 {
-                    return Ok("OK");
+                    return Ok("Ok");
                 }
                 else
                 {
